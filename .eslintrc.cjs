@@ -29,5 +29,6 @@ module.exports = {
   rules: {
     "react/react-in-jsx-scope": 0,
     "@typescript-eslint/switch-exhaustiveness-check": 2,
+    "@typescript-eslint/no-empty-interface": "warn"
   },
 };

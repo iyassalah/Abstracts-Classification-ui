@@ -1,12 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 
 
-interface IProps { }
-
-const Notfound = (props: IProps) => {
-    return (
-        <div className='results'>not found</div>
-    )
-}
+const Notfound = () => {
+  return (
+    <div className='results'>not found</div>
+  );
+};
 
 export default Notfound;
