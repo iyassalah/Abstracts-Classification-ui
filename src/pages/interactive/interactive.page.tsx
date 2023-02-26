@@ -5,7 +5,7 @@ interface IProps { }
 
 const Interactive = (props: IProps) => {
     return (
-        <div className='interactive'>App</div>
+        <div className='interactive'>Interactive</div>
     )
 }
 

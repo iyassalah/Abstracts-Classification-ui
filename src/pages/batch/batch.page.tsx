@@ -5,7 +5,7 @@ interface IProps { }
 
 const Batch = (props: IProps) => {
     return (
-        <div className='batch'>App</div>
+        <div className='batch'>Batch</div>
     )
 }
 

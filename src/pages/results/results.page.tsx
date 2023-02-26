@@ -5,7 +5,7 @@ interface IProps { }
 
 const Results = (props: IProps) => {
     return (
-        <div className='results'>App</div>
+        <div className='results'>Results</div>
     )
 }
 
