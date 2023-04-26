@@ -9,6 +9,7 @@ export default function abstract({ value }) {
 
 
 
+
     return (
 
         <>
@@ -20,13 +21,13 @@ export default function abstract({ value }) {
 
             <div className="abstract" onClick={isfocus} >
 
-                <div className='idk'>{value}</div>
+                <div className='idk'>{value.abstract}</div>
 
 
                 <div className="full-abstract" style={{
                     zIndex: focus ? '-1' : '3',
                     visibility: focus ? 'hidden' : 'visible'
-                }}>{value}</div>
+                }}>{value.abstract}</div>
             </div>
 
         </>

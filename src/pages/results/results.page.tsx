@@ -3,35 +3,57 @@ import './results.scss';
 interface IProps { }
 import Abstract from '../../components/abstract/abstract';
 const Results = (props: IProps) => {
-    const arr = ["asdfasdf", "asdf rewrefqerg erwg eg eg ew", "efwg etg tegwv tewgtrgt", "sd gdf sgf sdfg sdg dfg dssdg gd p", "adsf adsf sdadfsgdfgdsdgdssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssheiuokf hiupfgh rpiuokg hrp"]
-    const [focus, setFocus] = useState(true);
-    const isfocus = (e) => {
-        setFocus(current => !current);
-    };
+  const [focus, setFocus] = useState(true);
+  const [array, setarray] = useState([{ "abstract": "the first abstract", "tag": "Ai" }, { "abstract": "the second abstract", "tag": "Chem" }]);
+  const isfocus = (e) => {
+    setFocus(current => !current);
+  };
+  const [searcharray, setsearcharray] = useState(array);
+  
 
+  const search = (e) => {
+    
+    const mageseeker: any = [];
+    if (e.target.value === "None") {
+      setsearcharray(array);
+      return;
+    }
+    array.map((instance, index) => {
 
-    return (
-        <>
+      if (instance.tag === e.target.value) {
+        mageseeker.push(instance);
+      }
 
-            <div className="containeer">
+    }
 
-
-
-
-
-                <h1 className="header">Here are the results</h1>
-                {arr.map((instance, index) => {
-                    console.log(instance, index);
-                    return (
-                        <Abstract value={instance} key={index} />
-                    )
-                }
-
-                )};
-            </div>
-
-        </>
     )
+    setsearcharray(mageseeker);
+    
+
+  };
+  return (
+    <>
+      <div className="containeer">
+        <h1 className="header">Here are the results</h1>
+        <select onChange={search} name="cars" id="cars">
+          <option value="None">None</option>
+          <option value="Ai">Ai</option>
+          <option value="Math">Math</option>
+          <option value="Chem">Chem</option>
+        </select>
+       
+        {searcharray.map((instance, index) => {
+
+          return (
+            
+            <Abstract value={instance} key={index} />
+          )
+        }
+        )}
+      </div>
+
+    </>
+  )
 }
 
 export default Results;
