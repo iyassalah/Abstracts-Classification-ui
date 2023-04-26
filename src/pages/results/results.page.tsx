@@ -1,35 +1,30 @@
-import React, { useState } from 'react';
-import './results.scss';
-interface IProps { }
-import Abstract from '../../components/abstract/abstract';
+import React, { useState } from "react";
+import "./results.scss";
+interface IProps {}
+import Abstract from "../../components/abstract/abstract";
 const Results = (props: IProps) => {
   const [focus, setFocus] = useState(true);
-  const [array, setarray] = useState([{ "abstract": "the first abstract", "tag": "Ai" }, { "abstract": "the second abstract", "tag": "Chem" }]);
+  const [array, setarray] = useState([
+    { abstract: "the first abstract", tag: "Ai" },
+    { abstract: "the second abstract", tag: "Chem" },
+  ]);
   const isfocus = (e) => {
-    setFocus(current => !current);
+    setFocus((current) => !current);
   };
   const [searcharray, setsearcharray] = useState(array);
-  
 
   const search = (e) => {
-    
     const mageseeker: any = [];
     if (e.target.value === "None") {
       setsearcharray(array);
       return;
     }
     array.map((instance, index) => {
-
       if (instance.tag === e.target.value) {
         mageseeker.push(instance);
       }
-
-    }
-
-    )
+    });
     setsearcharray(mageseeker);
-    
-
   };
   return (
     <>
@@ -41,19 +36,13 @@ const Results = (props: IProps) => {
           <option value="Math">Math</option>
           <option value="Chem">Chem</option>
         </select>
-       
+
         {searcharray.map((instance, index) => {
-
-          return (
-            
-            <Abstract value={instance} key={index} />
-          )
-        }
-        )}
+          return <Abstract value={instance} key={index} />;
+        })}
       </div>
-
     </>
-  )
-}
+  );
+};
 
 export default Results;

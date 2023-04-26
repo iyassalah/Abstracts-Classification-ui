@@ -1,30 +1,26 @@
-import React from 'react';
-import './interactive.scss';
+import React from "react";
+import "./interactive.scss";
 
-interface IProps { }
+interface IProps {}
 
 const Interactive = (props: IProps) => {
-    return (
+  return (
+    <>
+      <div className="container">
+        <div className="text">Enter the abstract you want to classify:</div>
 
-        <>
+        <div className="input-container">
+          <textarea
+            className="input"
+            placeholder="Type your abstract here"
+          ></textarea>
+          <div className="underline"></div>
+        </div>
 
-            <div className="container">
-
-                <div className="text">Enter the abstract you want to classify:</div>
-
-                <div>  <textarea className="input"></textarea> </div>
-
-
-
-                <input type="button" className="button" value="Classify"></input>
-
-
-
-
-            </div>
-        
-        </>
-    )
-}
+        <button className="button">Classify</button>
+      </div>
+    </>
+  );
+};
 
 export default Interactive;

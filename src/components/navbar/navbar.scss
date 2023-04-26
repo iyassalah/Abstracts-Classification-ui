@@ -1,54 +1,5 @@
-.navbar{
-
-    height: 15vh;
-    width: 100%;
-    background-color: #519e46;
-    display: flex;
-    border-bottom: 3px solid;
-    border-bottom-left-radius:15%;
-    border-bottom-right-radius:15% ;
-
-    .link{
-        text-decoration: none;
-        font-size: 24px;
-        font-weight: 600;
-        color:rgb(214, 214, 214);
-    }
-
-    .batch{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        height: 100%;
-        width: 33.33%;
-
-        border-right: 1px solid;
-       
-    }
-    .interactive{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        height: 100%;
-        width: 33.33%;
-
-      
-       
-    }
-    .results{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-left: 1px solid;
-        height: 100%;
-        width: 33.33%;
-    
-       
-       
-    }
-    
+.navbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
-
-

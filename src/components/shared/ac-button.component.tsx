@@ -1,12 +1,10 @@
-import React from 'react';
-import './ac-button.scss';
+import React from "react";
+import "./ac-button.scss";
 
-interface IProps { }
+interface IProps {}
 
 const AcButton = (props: IProps) => {
-    return (
-        <div className='ac-button'>App</div>
-    )
-}
+  return <div className="ac-button">App</div>;
+};
 
 export default AcButton;
