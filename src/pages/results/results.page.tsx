@@ -1,43 +1,51 @@
 import React, { useState } from "react";
 import "./results.scss";
-interface IProps {}
+import { Select } from "antd";
 import Abstract from "../../components/abstract/abstract";
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface IProps {}
+
+const { Option } = Select;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Results = (props: IProps) => {
-  const [focus, setFocus] = useState(true);
-  const [array, setarray] = useState([
+  const [array] = useState([
     { abstract: "the first abstract", tag: "Ai" },
     { abstract: "the second abstract", tag: "Chem" },
   ]);
-  const isfocus = (e) => {
-    setFocus((current) => !current);
-  };
-  const [searcharray, setsearcharray] = useState(array);
 
-  const search = (e) => {
-    const mageseeker: any = [];
-    if (e.target.value === "None") {
-      setsearcharray(array);
-      return;
+  const [searchArray, setSearchArray] = useState(array);
+
+  const handleSearch = (value) => {
+    if (value === "None") {
+      setSearchArray(array);
+    } else {
+      const filteredArray = array.filter((instance) => instance.tag === value);
+      setSearchArray(filteredArray);
     }
-    array.map((instance, index) => {
-      if (instance.tag === e.target.value) {
-        mageseeker.push(instance);
-      }
-    });
-    setsearcharray(mageseeker);
   };
+
   return (
     <>
-      <div className="containeer">
+      <div className="container">
         <h1 className="header">Here are the results</h1>
-        <select onChange={search} name="cars" id="cars">
-          <option value="None">None</option>
-          <option value="Ai">Ai</option>
-          <option value="Math">Math</option>
-          <option value="Chem">Chem</option>
-        </select>
+        <Select
+          showSearch
+          placeholder="Select a tag"
+          optionFilterProp="children"
+          onChange={handleSearch}
+          filterOption={(input, option) =>
+            (option?.children as unknown as string)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          <Option value="None">None</Option>
+          <Option value="Ai">Ai</Option>
+          <Option value="Math">Math</Option>
+          <Option value="Chem">Chem</Option>
+        </Select>
 
-        {searcharray.map((instance, index) => {
+        {searchArray.map((instance, index) => {
           return <Abstract value={instance} key={index} />;
         })}
       </div>
