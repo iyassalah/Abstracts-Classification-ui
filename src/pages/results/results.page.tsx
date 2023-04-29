@@ -23,7 +23,7 @@ const { Option } = Select;
 
 
 const Results = () => {
-  const [options] = useState([
+  const [options, setOptions] = useState([
     { value: 'Ai', label: 'Ai' },
     { value: 'Math', label: 'Math' },
     { value: 'Chem', label: 'Chem' },
