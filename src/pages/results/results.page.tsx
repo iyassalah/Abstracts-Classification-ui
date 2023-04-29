@@ -4,10 +4,9 @@ import Abstract from "../../components/abstract/abstract";
 
 
 const { Option } = Select;
-const [loading] = useState(false);
 
 
-TODO: once the back-end is ready this comment code can be used to fetch the whole tages from the database.
+//TODO: once the back-end is ready this comment code can be used to fetch the whole tages from the database.
 // const Results = () => {
 //   const [options, setOptions] = useState([]);
 //   const [loading, setLoading] = useState(true);
@@ -30,12 +29,14 @@ const Results = () => {
     { value: 'Chem', label: 'Chem' },
   ]);
 
+  const [loading] = useState(false);
+
   const [searchArray, setSearchArray] = useState([
     { abstract: 'the first abstract', tag: 'Ai' },
     { abstract: 'the second abstract', tag: 'Chem' },
   ]);
 
-  const handleSearch = value => {
+  const handleSearch = (value: string) => {
     if (value === 'None') {
       setSearchArray([
         { abstract: 'the first abstract', tag: 'Ai' },
