@@ -9,5 +9,5 @@ function extractStringEnvVar(key: keyof NodeJS.ProcessEnv): string {
 }
 
 export const settings = {
-  API_PORT: extractStringEnvVar('VITE_API_PORT'),
+  API_PORT: extractStringEnvVar("VITE_API_PORT"),
 } as const;

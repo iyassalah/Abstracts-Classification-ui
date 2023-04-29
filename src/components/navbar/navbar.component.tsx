@@ -1,36 +1,26 @@
-import React from 'react';
-import './navbar.scss';
-import {Link} from 'react-router-dom';
-interface IProps { }
+import React from "react";
+import { Link } from "react-router-dom";
+import { Menu } from "antd";
+import "./navbar.scss";
 
-const Navbar = (props: IProps) => {
-    return (
-        <>
-       
-        <div className="navbar">
-
-          <div className="batch">
-
-            <Link className="link" to="/batch">Batch</Link>
-
-          </div>
-
-          <div className="interactive">
-
-          <Link className="link" to="/interactive">Interactive</Link>
-
-          </div>
-
-          <div className="results">
-
-          <Link className="link" to="/results">Results</Link>
-
-          </div>
-
-        </div>
-    
-        </>
-    )
+function Navbar() {
+  return (
+    <Menu
+      mode="horizontal"
+      defaultSelectedKeys={["interactive"]}
+      className="navbar"
+    >
+      <Menu.Item key="batch">
+        <Link to="/batch">Batch</Link>
+      </Menu.Item>
+      <Menu.Item key="interactive">
+        <Link to="/interactive">Interactive</Link>
+      </Menu.Item>
+      <Menu.Item key="results">
+        <Link to="/results">Results</Link>
+      </Menu.Item>
+    </Menu>
+  );
 }
 
 export default Navbar;
