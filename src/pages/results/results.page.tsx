@@ -23,11 +23,11 @@ const { Option } = Select;
 
 
 const Results = () => {
-  const [options, setOptions] = useState([
+  const options = [
     { value: 'Ai', label: 'Ai' },
     { value: 'Math', label: 'Math' },
     { value: 'Chem', label: 'Chem' },
-  ]);
+  ];
 
   const [loading] = useState(false);
 
