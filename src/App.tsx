@@ -9,14 +9,12 @@ import { Layout } from "antd";
 
 function App() {
   return (
-    <div className="App">
-      <Layout style={{ width: "100%", height: "100vh" }}>
-        <Layout.Header
-          style={{ padding: "0 50px", backgroundColor: "white", width: "100%" }}
-        >
+    <div className="">
+      <Layout style={{  }}>
+        <Layout.Header className="layout-header">
           <Navbar />
         </Layout.Header>
-        <Layout.Content style={{ padding: "0 50px", backgroundColor: "white" }}>
+        <Layout.Content className="app">
           <Routes>
             <Route path="/" element={<Interactive />}></Route>
             <Route path="interactive" element={<Interactive />}></Route>
