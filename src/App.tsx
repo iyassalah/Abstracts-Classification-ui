@@ -10,7 +10,7 @@ import { Layout } from "antd";
 function App() {
   return (
     <div className="">
-      <Layout style={{  }}>
+      <Layout>
         <Layout.Header className="layout-header">
           <Navbar />
         </Layout.Header>
