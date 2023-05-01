@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-interface IProps {}
-export default function abstract({ value }) {
+interface IProps {
+  value: { abstract: string };
+}
+
+export default function abstract({ value }: IProps) {
   const [focus, setFocus] = useState(true);
-  const isfocus = (e) => {
+  const isfocus: React.MouseEventHandler<HTMLDivElement> = (e) => {
     setFocus((current) => !current);
   };
 
