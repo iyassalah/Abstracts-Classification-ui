@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tsc": "tsc --watch"
   },
   "dependencies": {
     "antd": "^5.4.6",
