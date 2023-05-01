@@ -44,13 +44,13 @@ const Interactive = (props: IProps) => {
         </div>
 
         <div className="bottom-row">
-          <Button className="" type="primary" onClick={handleClassify}>
+          <Button size="large" className="" type="primary" onClick={handleClassify}>
             Classify
           </Button>
           <div className="tags-column">
             <div className="tags-label">Predicted Tags:</div>
             {tagList.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
+              <Tag className="tag" key={tag}>{tag}</Tag>
             ))}
           </div>
         </div>
