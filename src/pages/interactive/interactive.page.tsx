@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import "./interactive.scss";
 import { Button, Input, Tag } from "antd";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IProps {}
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Interactive = (props: IProps) => {
+const Interactive = () => {
   const [abstract, setAbstract] = useState("");
-  const [tagList, setTagList] = useState(['Math', 'AI']);
+  const [tagList, setTagList] = useState([]);
 
   const handleClassify = async () => {
     const response = await fetch("http://localhost:8000/interactive", {
