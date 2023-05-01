@@ -4,22 +4,27 @@ import { Menu } from "antd";
 import "./navbar.scss";
 
 function Navbar() {
+  const items = [
+    {
+      key: "batch",
+      label: <Link to="/batch">Batch</Link>
+    },
+    {
+      key: "interactive",
+      label: <Link to="/interactive">Interactive</Link>
+    },
+    {
+      key: "results",
+      label: <Link to="/results">Results</Link>
+    }]
+
   return (
     <Menu
       mode="horizontal"
       defaultSelectedKeys={["interactive"]}
       className="navbar"
-    >
-      <Menu.Item key="batch">
-        <Link to="/batch">Batch</Link>
-      </Menu.Item>
-      <Menu.Item key="interactive">
-        <Link to="/interactive">Interactive</Link>
-      </Menu.Item>
-      <Menu.Item key="results">
-        <Link to="/results">Results</Link>
-      </Menu.Item>
-    </Menu>
+      items={items}
+    />
   );
 }
 
