@@ -3,6 +3,7 @@ import Navbar from "./components/navbar/navbar.component";
 import Interactive from "./pages/interactive/interactive.page";
 import Batch from "./pages/batch/batch.page";
 import Results from "./pages/results/results.page";
+import LoginForm from "./pages/login/login.page";
 import NotFound from "./pages/notfound/notfound.page";
 import { Routes, Route } from "react-router-dom";
 import { Layout } from "antd";
@@ -20,8 +21,8 @@ function App() {
             <Route path="interactive" element={<Interactive />}></Route>
             <Route path="batch" element={<Batch />}></Route>
             <Route path="results" element={<Results />}></Route>
+            <Route path="login" element={<LoginForm/>}></Route>
             <Route path="*" element={<NotFound />}></Route>
-            {/* <Route path="login" element={<login/>}></Route> */}
           </Routes>
         </Layout.Content>
       </Layout>

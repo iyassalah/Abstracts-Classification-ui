@@ -1,0 +1,29 @@
+.login-form-wrapper {
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    height: 90vh; /* Make the container full height */
+  }
+  
+  .login-form-container {
+    width: 50%;
+  }
+  
+  .login-form {
+    .ant-form-item-label {
+      font-weight: bold;
+    }
+  
+    .ant-form-item-control {
+      margin-bottom: 16px;
+    }
+  
+    .ant-input {
+      border-radius: 4px;
+    }
+  
+    .ant-btn {
+      width: 100%;
+    }
+  }
+  
