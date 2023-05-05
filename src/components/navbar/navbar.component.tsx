@@ -20,24 +20,20 @@ function Navbar() {
   ];
 
   return (
-    <Menu
-      mode="horizontal"
-      defaultSelectedKeys={["interactive"]}
-      className="navbar"
-      // items={items}
+    <div className="navbar-wrapper">
+      <Menu
+        mode="horizontal"
+        defaultSelectedKeys={["interactive"]}
+        className="navbar"
+        items={items}
       >
-      <div>
-        {items.map((item) => (
-          <Menu.Item key={item.key}>{item.label}</Menu.Item>
-        ))}
-      </div>
-
+      </Menu>
       <div>
         <Button>
           <Link to="/login">Login</Link>
         </Button>
       </div>
-    </Menu>
+    </div>
   );
 }
 
