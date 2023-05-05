@@ -7,14 +7,14 @@ import './login.scss';
 function LoginForm() {
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: {email: string, password: string}) => {
     setLoading(true);
 
     try {
       const response = await axios.post('/login', values);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       message.error('Login failed. Please try again.');
     } finally {
       setLoading(false);
