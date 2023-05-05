@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Menu } from "antd";
+import { Menu, Button } from "antd";
 import "./navbar.scss";
 
 function Navbar() {
@@ -16,15 +16,24 @@ function Navbar() {
     {
       key: "results",
       label: <Link to="/results">Results</Link>
-    }]
+    }
+  ];
 
   return (
-    <Menu
-      mode="horizontal"
-      defaultSelectedKeys={["interactive"]}
-      className="navbar"
-      items={items}
-    />
+    <div className="navbar-wrapper">
+      <Menu
+        mode="horizontal"
+        defaultSelectedKeys={["interactive"]}
+        className="navbar"
+        items={items}
+      >
+      </Menu>
+      <div>
+        <Button>
+          <Link to="/login">Login</Link>
+        </Button>
+      </div>
+    </div>
   );
 }
 
