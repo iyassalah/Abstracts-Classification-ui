@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Select } from 'antd';
+import { Select, Table } from 'antd';
 import Abstract from "../../components/abstract/abstract";
+import ResultsTable from './results-table.component';
 
 
 const { Option } = Select;
@@ -51,7 +52,7 @@ const Results = () => {
   return (
     <div className="container">
       <h1 className="header">Here are the results</h1>
-      <Select
+      {/* <Select
         showSearch
         placeholder="Select a tag"
         optionFilterProp="children"
@@ -70,7 +71,9 @@ const Results = () => {
       </Select>
       {searchArray.map((instance, index) => {
         return <Abstract value={instance} key={index} />;
-      })}
+      })} */}
+
+      <ResultsTable />
     </div>
   );
 };
