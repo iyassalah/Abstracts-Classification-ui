@@ -5,7 +5,7 @@ interface IProps {
 
 export default function abstract({ value }: IProps) {
   const [focus, setFocus] = useState(true);
-  const isfocus: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const isfocus: React.MouseEventHandler<HTMLDivElement> = () => {
     setFocus((current) => !current);
   };
 
