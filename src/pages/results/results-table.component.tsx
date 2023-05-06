@@ -42,7 +42,7 @@ const ResultsTable = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            filteredValue: searchText ? [searchText] : null,
+            filteredValue: searchText['title'] ? [searchText['title']] : null,
             ...getColumnSearchProps('title', titleSearchInput),
         },
         {
@@ -73,7 +73,7 @@ const ResultsTable = () => {
                 </a>
             ),
             ellipsis: true,
-            filteredValue: searchText ? [searchText] : null,
+            filteredValue: searchText['abstract'] ? [searchText['abstract']] : null,
             ...getColumnSearchProps('abstract', abstractSearchInput),
         },
         {

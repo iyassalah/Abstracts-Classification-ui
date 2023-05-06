@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
 import { Button, Input, Space } from 'antd';
@@ -8,8 +8,7 @@ import Highlighter from 'react-highlight-words';
 
 function useTextSearch<T>() {
     type DataIndex = keyof T;
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState<DataIndex>('' as DataIndex);
+    const [searchText, setSearchText] = useState<Partial<Record<DataIndex, string>>>({});
 
     const handleSearch = (
         selectedKeys: string[],
@@ -17,13 +16,12 @@ function useTextSearch<T>() {
         dataIndex: DataIndex,
     ) => {
         confirm();
-        setSearchText(selectedKeys[0]);
-        setSearchedColumn(dataIndex);
+        setSearchText(search => ({ ...search, [dataIndex]: selectedKeys[0] }));
     };
 
     const handleReset = (clearFilters: () => void) => {
         clearFilters();
-        setSearchText('');
+        setSearchText({});
     };
 
     const getColumnSearchProps = (dataIndex: DataIndex, ref: React.RefObject<InputRef>): ColumnType<T> => ({
@@ -59,8 +57,7 @@ function useTextSearch<T>() {
                         size="small"
                         onClick={() => {
                             confirm({ closeDropdown: false });
-                            setSearchText((selectedKeys as string[])[0]);
-                            setSearchedColumn(dataIndex);
+                            setSearchText(search => ({ ...search, [dataIndex]: (selectedKeys as string[])[0] }));
                         }}
                     >
                         Filter
@@ -77,7 +74,7 @@ function useTextSearch<T>() {
                 </Space>
             </div>
         ),
-        filterIcon: (filtered: boolean) => { console.log(filtered); return <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} /> },
+        filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
         onFilter: (value, record) =>
             String(record[dataIndex])
                 .toLowerCase()
@@ -87,15 +84,14 @@ function useTextSearch<T>() {
                 setTimeout(() => ref.current?.select(), 100);
             }
         },
-        render: (text) =>
-            searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : text,
+        render: (text) => (
+            <Highlighter
+                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                searchWords={[searchText[dataIndex] ?? '']}
+                autoEscape
+                textToHighlight={text ? text.toString() : ''}
+            />
+        )
     });
     return { getColumnSearchProps, searchText };
 }
