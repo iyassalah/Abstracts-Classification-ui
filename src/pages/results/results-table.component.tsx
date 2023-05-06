@@ -51,7 +51,7 @@ const ResultsTable = () => {
         {
             title: 'Abstract',
             dataIndex: 'abstract',
-            render: (text, record) => (
+            render: (_, record) => (
                 <a
                     onClick={() =>
                         Modal.info({
@@ -71,7 +71,7 @@ const ResultsTable = () => {
             dataIndex: 'labels',
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value, record) => typeof value === 'string' && record.labels.includes(value),
+            onFilter: (_, record) => filters.labels?.every(label => record.labels.includes(String(label))) ?? false,
             filteredValue: filters.labels || null,
             filters: Array
                 .from(new Set(mock.map(e => e.labels).flat()))
