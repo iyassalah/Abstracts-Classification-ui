@@ -3,12 +3,12 @@ import { Form, Input, Button, message } from "antd";
 import axios from "axios";
 
 import "./login.scss";
-import { ILogin } from "../../types/responses";
+import * as Response from "../../types/responses";
 
 function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [Logged, setLogged] = useState(false);
-  const handleLogin = (res: ILogin) => {
+  const handleLogin = (res: Response.ILogin) => {
     setLogged(true);
   };
 
@@ -19,7 +19,12 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await axios.post<ILogin>("http://localhost:8000/login", values);
+      const response = await axios.post<Response.ILogin>("http://localhost:8000/auth/token", values, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response);
       handleLogin(response.data)
     } catch (error) {
       message.error("Login failed. Please try again.");
