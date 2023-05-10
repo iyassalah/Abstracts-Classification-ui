@@ -57,21 +57,6 @@ const ResultsTable = () => {
         {
             title: 'Abstract',
             dataIndex: 'abstract',
-            render: (_, record) => (
-                <a
-                    className='abstract'
-                    onClick={() =>
-                        Modal.info({
-                            title: record.title,
-                            content: <p>{record.abstract}</p>,
-                            centered: true,
-                            maskClosable: true,
-                        })
-                    }
-                >
-                    {record.abstract}
-                </a>
-            ),
             ellipsis: true,
             filteredValue: searchText['abstract'] ? [searchText['abstract']] : null,
             ...getColumnSearchProps('abstract', abstractSearchInput),
