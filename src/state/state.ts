@@ -1,7 +1,9 @@
 export type State = {
     token: string | null;
+    expiration: number | null;
     login(token: string): void;
     logout(): void;
+    isTokenExpired(): boolean;
 }
 export const initialState: State = {
     token: localStorage.getItem("token"),
@@ -11,11 +13,14 @@ export const initialState: State = {
     logout() {
         return
     },
+    isTokenExpired() {
+        return true;
+    },
+    expiration: null,
 };
 
 export type Logout = {
     type: 'LOGOUT',
-    payload: Record<string, never>
 }
 
 export type Login = {
@@ -25,4 +30,8 @@ export type Login = {
     }
 }
 
-export type Action = Login | Logout;
+export type CheckExpiry = {
+    type: 'CHECK_EXPIRATION',
+}
+
+export type Action = Login | Logout | CheckExpiry;

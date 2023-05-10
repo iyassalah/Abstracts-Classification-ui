@@ -20,14 +20,18 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
 
     const logout = () => {
         dispatch({
-            type: "LOGOUT",
-            payload: {}
+            type: "LOGOUT"
         });
     };
 
+    const isTokenExpired = () => {
+        dispatch({ type: "CHECK_EXPIRATION" });
+        return state.expiration === null;
+    }
+
     return (
         <AuthContext.Provider
-            value={{ token: state.token, login, logout, }}
+            value={{ token: state.token, login, logout, expiration: null, isTokenExpired }}
         >
             {children}
         </AuthContext.Provider>
