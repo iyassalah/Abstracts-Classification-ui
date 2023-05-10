@@ -4,6 +4,7 @@ import axios from "axios";
 
 import "./login.scss";
 import * as Response from "../../types/responses";
+import * as Request from "../../types/requests";
 import { AuthContext } from "../../state/reducer";
 
 function LoginForm() {
@@ -13,10 +14,7 @@ function LoginForm() {
     login(res.access_token);
   };
 
-  const handleSubmit = async (values: {
-    username: string;
-    password: string;
-  }) => {
+  const handleSubmit = async (values: Request.ILogin) => {
     setLoading(true);
 
     try {
@@ -25,7 +23,6 @@ function LoginForm() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      console.log(response);
       handleLogin(response.data)
     } catch (error) {
       message.error("Login failed. Please try again.");
