@@ -5,11 +5,14 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import { settings } from "./config/settings";
+import AuthProvider from "./state/provider";
 
 axios.defaults.baseURL = settings.API_ENDPOINT;
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </BrowserRouter>
 );

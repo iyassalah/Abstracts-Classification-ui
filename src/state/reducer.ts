@@ -1,53 +1,27 @@
-type Action = "LOGIN_SUCCESS" | "LOGIN_FAILURE"
-
-import axios from 'axios'
-
-interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-interface LoginSuccessPayload {
-  email: string;
-  accessToken: string;
-}
-
-interface LoginFailurePayload {
-  error: any;
-}
-
-type LoginSuccessAction = { type: 'LOGIN_SUCCESS'; payload: LoginSuccessPayload }
-type LoginFailureAction = { type: 'LOGIN_FAILURE'; payload: LoginFailurePayload }
-type LoginAction = LoginSuccessAction | LoginFailureAction
+import { createContext } from "react";
+import { Action, State, initialState } from "./state";
 
 
-const initialState = {
-    isLoggedIn: false,
-    email: '',
-    error: '',
-    accessToken: localStorage.getItem('access_token') || '',
-  } as const;
-  
-  // Define reducer function to handle state changes
-  export const reducer = (state = initialState, action: LoginAction) => {
-    switch (action.type) {
-      case 'LOGIN_SUCCESS':
-        return {
-          ...state,
-          isLoggedIn: true,
-          email: action.payload.email,
-          accessToken: action.payload.accessToken,
-          error: '',
-        };
-      case 'LOGIN_FAILURE':
-        return {
-          ...state,
-          isLoggedIn: false,
-          email: '',
-          error: action.payload.error,
-        };
-      default:
-        return state;
-    }
-  };
-  
+const AuthContext = createContext<State>(initialState);
+
+export const authReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case "LOGIN":
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        token: action.payload.token,
+      };
+    case "LOGOUT":
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+      };
+    default:
+      return state;
+  }
+};
+
+
+export { AuthContext };

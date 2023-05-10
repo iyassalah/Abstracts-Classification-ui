@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import axios from "axios";
 
 import "./login.scss";
 import * as Response from "../../types/responses";
+import { AuthContext } from "../../state/reducer";
 
 function LoginForm() {
+  const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [Logged, setLogged] = useState(false);
   const handleLogin = (res: Response.ILogin) => {
-    setLogged(true);
+    login(res.access_token);
   };
 
   const handleSubmit = async (values: {
@@ -19,7 +20,7 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await axios.post<Response.ILogin>("http://localhost:8000/auth/token", values, {
+      const response = await axios.post<Response.ILogin>("/auth/token", values, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
