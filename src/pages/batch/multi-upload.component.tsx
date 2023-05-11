@@ -1,46 +1,39 @@
 import React from 'react';
+import './multiupload.scss'
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
-import { RcFile } from 'antd/es/upload';
-import axios from 'axios';
 import Dragger from 'antd/es/upload/Dragger';
+import { LabelledPDF } from '../../types/responses';
 
 
 const MultiUpload: React.FC = () => {
-    const fileList: (string | Blob | RcFile)[] = [];
+    const res: LabelledPDF[] = [];
 
-    const uploadBatch = () => {
-        const form = new FormData();
-        fileList.filter(Boolean).forEach(file => form.append(`files`, file));
-        axios.post('/active/proba/pdfs', form, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        })
-    }
-
-    const props: UploadProps = {
-        name: 'files',
+    const props: UploadProps<LabelledPDF> = {
+        name: 'file',
         multiple: true,
-        onChange({ file, fileList }) {
-            if (file.status !== 'uploading') {
-                console.log(file, fileList);
+        onChange({ file }) {
+            if (file?.response) {
+                res.push(file.response);
+                console.log(file.response);
             }
         },
-        customRequest(data) {
-            fileList.push(data.file);
-            setTimeout(uploadBatch, 1000);
-        },
+        action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
     };
     return (
-        <Dragger {...props}>
-            <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
-                Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                banned files.
-            </p>
-        </Dragger>
+        <div className='multiupload-wrapper'>
+            <Dragger {...props} className='dragger'>
+                <div className='dragger-children'>
+                    <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    <p className="ant-upload-hint">
+                        Hints
+                    </p>
+                </div>
+            </Dragger>
+        </div>
     )
 };
 
