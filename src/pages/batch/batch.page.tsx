@@ -1,20 +1,13 @@
 import React from "react";
 import "./batch.scss";
+import MultiUpload from "./multi-upload.component";
 
-interface IProps {}
 
-const Batch = (props: IProps) => {
+const Batch = () => {
   return (
     <>
       <div className="container">
-        <div className="text">
-          Enter the file that contains the abstracts you want to classify:
-        </div>
-
-        <div className="buttons">
-          <input type="button" className="button" value="Upload file"></input>
-          <input type="button" className="button" value="Classify"></input>
-        </div>
+        <MultiUpload />
       </div>
     </>
   );
