@@ -7,6 +7,7 @@ import LoginForm from "./pages/login/login.page";
 import NotFound from "./pages/notfound/notfound.page";
 import { Routes, Route } from "react-router-dom";
 import { Layout } from "antd";
+import AdminDashboard from "./pages/admin-dashboard/admin-dashboard.page";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="batch" element={<Batch />}></Route>
             <Route path="results" element={<Results />}></Route>
             <Route path="login" element={<LoginForm/>}></Route>
+            <Route path="adminDashboard" element={<AdminDashboard/>}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>
         </Layout.Content>

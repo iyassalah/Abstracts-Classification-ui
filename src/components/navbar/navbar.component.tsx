@@ -16,6 +16,10 @@ function Navbar() {
     {
       key: "results",
       label: <Link to="/results">Results</Link>
+    },
+    {
+      key: "admin-dashboard",
+      label: <Link to="/adminDashboard">Admin Dashboard</Link>
     }
   ];
 
