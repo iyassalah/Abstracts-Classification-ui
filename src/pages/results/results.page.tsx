@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ResultsTable from './results-table.component';
+import { ResultsContext } from '../../state/results';
 
 const Results = () => {
+  const { state: { labelledPDFs } } = useContext(ResultsContext)
 
   return (
     <div className="container">

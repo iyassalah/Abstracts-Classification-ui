@@ -5,7 +5,7 @@ import axios from "axios";
 import "./login.scss";
 import * as Response from "../../types/responses";
 import * as Request from "../../types/requests";
-import { AuthContext } from "../../state/reducer";
+import { AuthContext } from "../../state/auth/reducer";
 
 function LoginForm() {
   const { login } = useContext(AuthContext);
