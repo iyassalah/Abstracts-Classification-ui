@@ -1,21 +1,31 @@
-import { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
-import axios from 'axios';
+import { useContext, useState } from "react";
+import { Form, Input, Button, message } from "antd";
+import axios from "axios";
 
-import './login.scss';
+import "./login.scss";
+import * as Response from "../../types/responses";
+import * as Request from "../../types/requests";
+import { AuthContext } from "../../state/reducer";
 
 function LoginForm() {
+  const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const handleLogin = (res: Response.ILogin) => {
+    login(res.access_token);
+  };
 
-  const handleSubmit = async (values: {email: string, password: string}) => {
+  const handleSubmit = async (values: Request.ILogin) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/login', values);
-      // console.log(response.data);
+      const response = await axios.post<Response.ILogin>("/auth/token", values, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      handleLogin(response.data)
     } catch (error) {
-      // console.error(error);
-      message.error('Login failed. Please try again.');
+      message.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -32,22 +42,27 @@ function LoginForm() {
         >
           <Form.Item
             label="Email"
-            name="email"
-            rules={[{ required: true, message: 'Please enter your email' }]}
+            name="username"
+            rules={[{ required: true, message: "Please enter your email" }]}
           >
-            <Input size='large' placeholder="Enter email" />
+            <Input size="large" placeholder="Enter email" />
           </Form.Item>
 
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: 'Please enter your password' }]}
+            rules={[{ required: true, message: "Please enter your password" }]}
           >
-            <Input.Password size='large' placeholder="Enter password" />
+            <Input.Password size="large" placeholder="Enter password" />
           </Form.Item>
 
           <Form.Item>
-            <Button size='large' type="primary" htmlType="submit" loading={loading}>
+            <Button
+              size="large"
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+            >
               Login
             </Button>
           </Form.Item>
