@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Modal, Input, Form, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import axios from "axios"; // import axios library
 import "./admin-dashboard.scss";
 
 function AdminDashboard() {
@@ -14,9 +15,28 @@ function AdminDashboard() {
     setIsModalVisible(false);
   };
 
-  const handleFinish = (values: {email: string, password: string, username: string}) => {
-    console.log(values);
-    setIsModalVisible(false);
+  const handleFinish = (values: {
+    email: string;
+    password: string;
+    username: string;
+  }) => {
+    const { username, email, password } = values;
+
+    // send HTTP request to create admin user
+    axios
+      .post("/admin", {
+        username,
+        email,
+        password,
+        isAdmin: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setIsModalVisible(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
