@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
-import { Button, Input, Modal, Space } from "antd";
+import { Button, Input, Space } from "antd";
 import type { ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
 function useTextSearch<T extends { title?: string }>() {
   type DataIndex = keyof T;
+  type RenderFuntion = Exclude<ColumnType<T>['render'], undefined>;
+
   const [searchText, setSearchText] = useState<
     Partial<Record<DataIndex, string>>
   >({});
@@ -26,10 +28,11 @@ function useTextSearch<T extends { title?: string }>() {
     setSearchText({});
   };
 
+
   const getColumnSearchProps = (
     dataIndex: DataIndex,
     ref: React.RefObject<InputRef>,
-    // render?: ColumnType<T>['render']
+    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => React.ReactNode = e => e
   ): ColumnType<T> => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -107,26 +110,14 @@ function useTextSearch<T extends { title?: string }>() {
         setTimeout(() => ref.current?.select(), 100);
       }
     },
-    render: (text, record) => (
-      <a
-        className="abstract"
-        onClick={() =>
-          Modal.info({
-            title: record?.title ?? 'title',
-            content: <p>{text}</p>,
-            centered: true,
-            maskClosable: true,
-          })
-        }
-      >
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[searchText[dataIndex] ?? ""]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      </a>
-    ),
+    render: (text, record, index) => renderCallback(
+      <Highlighter
+        highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+        searchWords={[searchText[dataIndex] ?? ""]}
+        autoEscape
+        textToHighlight={text ? text.toString() : ""}
+      />
+      , [text, record, index]),
   });
   return { getColumnSearchProps, searchText };
 }

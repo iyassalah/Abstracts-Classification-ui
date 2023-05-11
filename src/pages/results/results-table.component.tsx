@@ -59,7 +59,21 @@ const ResultsTable = () => {
             dataIndex: 'abstract',
             ellipsis: true,
             filteredValue: searchText['abstract'] ? [searchText['abstract']] : null,
-            ...getColumnSearchProps('abstract', abstractSearchInput),
+            ...getColumnSearchProps('abstract', abstractSearchInput, (element, [text, record]) => (
+                <a
+                    className="abstract"
+                    onClick={() =>
+                        Modal.info({
+                            title: record?.title ?? 'title',
+                            content: <p>{text}</p>,
+                            centered: true,
+                            maskClosable: true,
+                        })
+                    }
+                >
+                    {element}
+                </a>
+            )),
         },
         {
             title: 'Labels',
