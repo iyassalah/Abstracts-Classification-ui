@@ -2,37 +2,20 @@ import React from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { Button, Upload } from 'antd';
+import { RcFile } from 'antd/es/upload';
+import axios from 'axios';
 
 
 const MultiUpload: React.FC = () => {
-    const fileList: File[] = []; // assume this is an array of PDF files to send
+    const fileList: (string | Blob | RcFile)[] = [];
 
-    const socket = new WebSocket('ws://localhost:8000/ws'); // replace with your server URL
-
-    // Handle WebSocket connection events
-    socket.onopen = () => {
-        console.log('WebSocket connection opened');
-
-        // Loop through the fileList and send each file
-        for (let i = 0; i < fileList.length; i++) {
-            const fileReader = new FileReader();
-            const file = fileList[i];
-
-            fileReader.readAsArrayBuffer(file);
-
-            // Handle file reading events
-            fileReader.onload = () => {
-                const binary = fileReader.result;
-                if (!binary)
-                    return;
-                socket.send(binary);
-            };
-
-            fileReader.onerror = (error) => {
-                console.error('Error reading file:', error);
-            };
-        }
-    };
+    const uploadBatch = () => {
+        const form = new FormData();
+        fileList.filter(Boolean).forEach(file => form.append(`files`, file));
+        axios.post('/active/proba/pdfs', form, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    }
 
     const props: UploadProps = {
         onChange({ file, fileList }) {
@@ -41,20 +24,10 @@ const MultiUpload: React.FC = () => {
             }
         },
         customRequest(data) {
-            socket.send(data.file);
+            if (fileList.length === 0)
+                setTimeout(uploadBatch, 1000);
+            fileList.push(data.file);
         }
-    };
-
-    socket.onmessage = (event) => {
-        console.log('Received message from server:', event.data);
-    };
-
-    socket.onclose = (event) => {
-        console.log('WebSocket connection closed with code:', event.code);
-    };
-
-    socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
     };
     return (
         <Upload {...props}>
