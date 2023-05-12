@@ -4,6 +4,7 @@ export type State = {
     login(token: string): void;
     logout(): void;
     isTokenExpired(): boolean;
+    username: string | null;
 }
 export const initialState: State = {
     token: localStorage.getItem("token"),
@@ -17,6 +18,7 @@ export const initialState: State = {
         return true;
     },
     expiration: null,
+    username: null,
 };
 
 export type Logout = {

@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Button } from "antd";
 import "./navbar.scss";
+import { AuthContext } from "../../state/reducer";
 
 function Navbar() {
+
+  const {token, username} = useContext(AuthContext);
+
   const items = [
     {
       key: "batch",

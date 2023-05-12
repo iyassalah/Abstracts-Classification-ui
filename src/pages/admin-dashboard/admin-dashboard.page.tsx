@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Modal, Input, Form, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios"; // import axios library
 import "./admin-dashboard.scss";
+import {AuthContext} from '../../state/reducer'
 
 function AdminDashboard() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const {token} = useContext(AuthContext);
 
   const handleShowModal = () => {
     setIsModalVisible(true);
@@ -24,12 +26,18 @@ function AdminDashboard() {
 
     // send HTTP request to create admin user
     axios
-      .post("/admin", {
-        username,
-        email,
-        password,
-        isAdmin: true,
-      })
+      .post(
+        "/admin",
+        {
+          username,
+          email,
+          password,
+          isAdmin: true,
+        },
+        { headers: {
+          Authorization: `Bearer ${token}`
+        } }
+      )
       .then((response) => {
         console.log(response.data);
         setIsModalVisible(false);
