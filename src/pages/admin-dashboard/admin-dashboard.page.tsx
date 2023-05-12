@@ -1,18 +1,22 @@
 import { useState, useContext } from "react";
 import { Input, Form, Button, Tabs } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import "./admin-dashboard.scss";
 import { AuthContext } from "../../state/reducer";
 
 const { TabPane } = Tabs;
 
+type FormValues = {
+  username: string;
+  password: string;
+  email: string;
+}
+
 function AdminDashboard() {
   const { token } = useContext(AuthContext);
-  const [users, setUsers] = useState([]);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
-  const handleCreateUser = (values) => {
+  const handleCreateUser = (values: FormValues) => {
     const { username, email, password } = values;
 
     axios
@@ -34,7 +38,6 @@ function AdminDashboard() {
         console.log(response.data);
         setIsCreatingUser(false);
         // Add the new user to the list of users
-        setUsers([...users, response.data]);
       })
       .catch((error) => {
         console.error(error);
@@ -114,7 +117,7 @@ function AdminDashboard() {
                   <Button type="primary" htmlType="submit">
                     Create User
                   </Button>
-                  <Button type="danger" onClick={handleCancelCreateUser}>
+                  <Button danger onClick={handleCancelCreateUser}>
                     Cancel
                   </Button>
                 </Form.Item>
