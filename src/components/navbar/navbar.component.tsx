@@ -37,13 +37,16 @@ function Navbar() {
       >
       </Menu>
       <div>{token === null ? (
-        <Button>
-          <Link to="/login">Login</Link>
-        </Button>) : (
-        <Button onClick={logout}>Logout</Button>
-      )}
+          <Button>
+            <Link to="/login">Login</Link>
+          </Button>) : (
+          <div>
+            <span>Welcome, {username}</span>
+            <Button onClick={logout}>Logout</Button>
+          </div>
+        )}
       </div>
-    </div >
+    </div>
   );
 }
 
