@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { Input, Form, Button, Tabs, message } from "antd";
 import axios from "axios";
 import "./admin-dashboard.scss";
@@ -15,6 +15,7 @@ type FormValues = {
 
 function AdminDashboard() {
   const { token } = useContext(AuthContext);
+  const formRef = useRef<any>();
 
   const handleCreateUser = (values: FormValues) => {
     const { username, email, password } = values;
@@ -44,6 +45,10 @@ function AdminDashboard() {
       });
   };
 
+  const handleCancel = () => {
+    formRef.current.resetFields();
+  }
+
   return (
     <div className="admin-dashboard">
       <div className="admin-dashboard-body">
@@ -67,7 +72,7 @@ function AdminDashboard() {
             key="create-admin-user"
           >
             <div className="admin-dashboard-create-user-form">
-              <Form layout="vertical" onFinish={handleCreateUser}>
+              <Form ref={formRef} layout="vertical" onFinish={handleCreateUser}>
                 <Form.Item
                   name="email"
                   label="Email"
@@ -112,8 +117,7 @@ function AdminDashboard() {
                   <Button type="primary" htmlType="submit">
                     Create User
                   </Button>
-                  <Button danger>
-                    {/* TODO: handle this */}
+                  <Button danger onClick={handleCancel}>
                     Cancel
                   </Button>
                 </Form.Item>
@@ -124,6 +128,7 @@ function AdminDashboard() {
       </div>
     </div>
   );
+
 }
 
 export default AdminDashboard;
