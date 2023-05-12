@@ -4,7 +4,7 @@ import axios from "axios";
 import "./admin-dashboard.scss";
 import { AuthContext } from "../../state/reducer";
 import { ICreateAdmin } from "../../types/responses";
-import { useForm } from "antd/es/form/Form";
+import { FormInstance, useForm } from "antd/es/form/Form";
 
 const { TabPane } = Tabs;
 
@@ -16,8 +16,8 @@ type FormValues = {
 
 function AdminDashboard() {
   const { token } = useContext(AuthContext);
-  const formRef = useRef<any>();
-
+  const formRef = useRef<FormInstance>(null);
+  
   const handleCreateUser = (values: FormValues) => {
     const { username, email, password } = values;
   
@@ -39,7 +39,9 @@ function AdminDashboard() {
       .then((response) => {
         console.log(response.data);
         message.success('User created successfully');
-        formRef.current.resetFields();
+        if (formRef.current) {
+          formRef.current.resetFields();
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -48,7 +50,9 @@ function AdminDashboard() {
   };
 
   const handleCancel = () => {
-    formRef.current.resetFields();
+    if (formRef.current) {
+      formRef.current.resetFields();
+    }  
   }
 
   return (
