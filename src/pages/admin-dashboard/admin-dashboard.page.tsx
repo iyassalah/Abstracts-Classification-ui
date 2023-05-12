@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Input, Form, Button, Tabs } from "antd";
+import { Input, Form, Button, Tabs, message } from "antd";
 import axios from "axios";
 import "./admin-dashboard.scss";
 import { AuthContext } from "../../state/reducer";
@@ -18,7 +18,7 @@ function AdminDashboard() {
 
   const handleCreateUser = (values: FormValues) => {
     const { username, email, password } = values;
-
+  
     axios
       .post<ICreateAdmin>(
         "/admin",
@@ -36,12 +36,13 @@ function AdminDashboard() {
       )
       .then((response) => {
         console.log(response.data);
+        message.success('User created successfully');
       })
       .catch((error) => {
         console.error(error);
+        message.error('User creation failed');
       });
   };
-
 
   return (
     <div className="admin-dashboard">
@@ -126,3 +127,4 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
