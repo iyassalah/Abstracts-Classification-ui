@@ -41,7 +41,7 @@ function Navbar() {
             <Link to="/login">Login</Link>
           </Button>) : (
           <div>
-            <span>Welcome, {username}</span>
+            <span>Welcome, {username + " "}</span>
             <Button onClick={logout}>Logout</Button>
           </div>
         )}
