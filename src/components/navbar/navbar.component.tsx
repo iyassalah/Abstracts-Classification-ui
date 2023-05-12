@@ -5,7 +5,7 @@ import "./navbar.scss";
 import { AuthContext } from "../../state/reducer";
 
 function Navbar() {
-  const { token, username, role } = useContext(AuthContext);
+  const { token, username, role, logout } = useContext(AuthContext);
 
   const items = [
     {
@@ -36,10 +36,12 @@ function Navbar() {
         items={role === 'admin' ? [...items, adminLink] : items}
       >
       </Menu>
-      <div>
+      <div>{token === null ? (
         <Button>
           <Link to="/login">Login</Link>
-        </Button>
+        </Button>) : (
+        <Button onClick={logout}>Logout</Button>
+      )}
       </div>
     </div >
   );

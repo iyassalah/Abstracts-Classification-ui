@@ -36,6 +36,8 @@ export const authReducer = (state: State, action: Action): State => {
         ...state,
         token: null,
         username: null,
+        role: null,
+        expiration: null,
       };
     case "CHECK_EXPIRATION":
       if (state.expiration && state.expiration < new Date().getTime()) {
