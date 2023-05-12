@@ -4,9 +4,9 @@ $modal-body-padding: 40px;
 
 .admin-dashboard {
   padding: 20px;
-
   .create-user-btn {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-left: auto;
   }
 
   .ant-divider-horizontal {
@@ -54,3 +54,10 @@ $modal-body-padding: 40px;
     }
   }
 }
+
+
+
+.ant-tabs {
+  flex: 1;
+}
+
