@@ -1,9 +1,9 @@
-// AdminDashboard.scss
 $modal-width: 600px;
 $modal-body-padding: 40px;
 
 .admin-dashboard {
   padding: 10px;
+
   .create-user-btn {
     margin-bottom: 5px;
     margin-left: auto;
@@ -12,10 +12,8 @@ $modal-body-padding: 40px;
   .ant-divider-horizontal {
     margin: 10px 0;
   }
-
 }
 
 .ant-tabs {
   flex: 1;
 }
-

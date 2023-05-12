@@ -8,3 +8,8 @@ export interface ILogin {
     message: string;
     access_token: string;
 }
+
+
+export interface ICreateAdmin {
+    user_id: string;
+}

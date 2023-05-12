@@ -1,8 +1,9 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { Input, Form, Button, Tabs } from "antd";
 import axios from "axios";
 import "./admin-dashboard.scss";
 import { AuthContext } from "../../state/reducer";
+import { ICreateAdmin } from "../../types/responses";
 
 const { TabPane } = Tabs;
 
@@ -19,7 +20,7 @@ function AdminDashboard() {
     const { username, email, password } = values;
 
     axios
-      .post(
+      .post<ICreateAdmin>(
         "/admin",
         {
           username,
@@ -59,7 +60,6 @@ function AdminDashboard() {
           <TabPane
             tab={
               <span>
-                {/* <PlusOutlined />  */}
                 Create Admin User
               </span>
             }
