@@ -4,7 +4,7 @@ import axios from "axios";
 import "./admin-dashboard.scss";
 import { AuthContext } from "../../state/reducer";
 import { ICreateAdmin } from "../../types/responses";
-import { FormInstance, useForm } from "antd/es/form/Form";
+import { FormInstance } from "antd/es/form/Form";
 
 const { TabPane } = Tabs;
 
