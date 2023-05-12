@@ -3,59 +3,17 @@ $modal-width: 600px;
 $modal-body-padding: 40px;
 
 .admin-dashboard {
-  padding: 20px;
+  padding: 10px;
   .create-user-btn {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     margin-left: auto;
   }
 
   .ant-divider-horizontal {
-    margin: 20px 0;
+    margin: 10px 0;
   }
 
-  .create-user-modal {
-    .ant-modal-content {
-      width: $modal-width;
-    }
-
-    .ant-modal-body {
-      padding: $modal-body-padding;
-
-      .ant-form-item {
-        margin-bottom: 20px;
-        font-size: 16px;
-
-        .ant-form-item-label {
-          font-size: 16px;
-          font-weight: bold;
-        }
-
-        .ant-input,
-        .ant-input-password {
-          font-size: 16px;
-          padding: 12px;
-        }
-
-        .ant-btn {
-          font-size: 16px;
-          padding: 12px 20px;
-        }
-
-        .ant-btn-primary {
-          margin-right: 10px;
-        }
-
-        .ant-btn-danger {
-          background-color: #f5222d;
-          border-color: #f5222d;
-          color: #fff;
-        }
-      }
-    }
-  }
 }
-
-
 
 .ant-tabs {
   flex: 1;
