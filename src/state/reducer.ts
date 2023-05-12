@@ -7,7 +7,6 @@ const AuthContext = createContext<State>(initialState);
 export const authReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "LOGIN": {
-      localStorage.setItem("token", action.payload.token); //TODO: this is must be removed from here .
       const decoded = jwt_decode(action.payload.token);
       if (
         !decoded ||
@@ -31,7 +30,6 @@ export const authReducer = (state: State, action: Action): State => {
       };
     }
     case "LOGOUT":
-      localStorage.removeItem("token");
       return {
         ...state,
         token: null,

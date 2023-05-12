@@ -16,12 +16,14 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
         token,
       },
     });
+    localStorage.setItem("token", token);
   };
 
   const logout = () => {
     dispatch({
       type: "LOGOUT",
     });
+    localStorage.removeItem("token");
   };
 
   const isTokenExpired = () => {
