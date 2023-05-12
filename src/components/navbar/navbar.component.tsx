@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Button } from "antd";
 import "./navbar.scss";
+import { AuthContext } from "../../state/reducer";
 
 function Navbar() {
+  const { token, username, role, logout } = useContext(AuthContext);
+
   const items = [
     {
       key: "batch",
@@ -19,19 +22,29 @@ function Navbar() {
     }
   ];
 
+  const adminLink = {
+    key: "admin-dashboard",
+    label: <Link to="/adminDashboard">Admin Dashboard</Link>
+  };
+
   return (
     <div className="navbar-wrapper">
       <Menu
         mode="horizontal"
         defaultSelectedKeys={["interactive"]}
         className="navbar"
-        items={items}
+        items={role === 'admin' ? [...items, adminLink] : items}
       >
       </Menu>
-      <div>
-        <Button>
-          <Link to="/login">Login</Link>
-        </Button>
+      <div>{token === null ? (
+          <Button>
+            <Link to="/login">Login</Link>
+          </Button>) : (
+          <div>
+            <span>Welcome, {username + " "}</span>
+            <Button onClick={logout}>Logout</Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 export type State = {
     token: string | null;
     expiration: number | null;
+    username: string | null;
+    role: 'none' | 'admin' | null;
     login(token: string): void;
     logout(): void;
     isTokenExpired(): boolean;
@@ -17,6 +19,8 @@ export const initialState: State = {
         return true;
     },
     expiration: null,
+    username: null,
+    role: null,
 };
 
 export type Logout = {
