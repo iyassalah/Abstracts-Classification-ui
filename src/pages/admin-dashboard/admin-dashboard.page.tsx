@@ -14,7 +14,6 @@ type FormValues = {
 
 function AdminDashboard() {
   const { token } = useContext(AuthContext);
-  const [isCreatingUser, setIsCreatingUser] = useState(false);
 
   const handleCreateUser = (values: FormValues) => {
     const { username, email, password } = values;
@@ -36,17 +35,12 @@ function AdminDashboard() {
       )
       .then((response) => {
         console.log(response.data);
-        setIsCreatingUser(false);
-        // Add the new user to the list of users
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleCancelCreateUser = () => {
-    setIsCreatingUser(false);
-  };
 
   return (
     <div className="admin-dashboard">
@@ -117,7 +111,8 @@ function AdminDashboard() {
                   <Button type="primary" htmlType="submit">
                     Create User
                   </Button>
-                  <Button danger onClick={handleCancelCreateUser}>
+                  <Button danger>
+                    {/* TODO: handle this */}
                     Cancel
                   </Button>
                 </Form.Item>
