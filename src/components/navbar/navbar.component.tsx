@@ -5,8 +5,7 @@ import "./navbar.scss";
 import { AuthContext } from "../../state/reducer";
 
 function Navbar() {
-
-  const {token, username} = useContext(AuthContext);
+  const { token, username, role } = useContext(AuthContext);
 
   const items = [
     {
@@ -20,12 +19,13 @@ function Navbar() {
     {
       key: "results",
       label: <Link to="/results">Results</Link>
-    },
-    {
-      key: "admin-dashboard",
-      label: <Link to="/adminDashboard">Admin Dashboard</Link>
     }
   ];
+
+  const adminLink = {
+    key: "admin-dashboard",
+    label: <Link to="/adminDashboard">Admin Dashboard</Link>
+  };
 
   return (
     <div className="navbar-wrapper">
@@ -33,7 +33,7 @@ function Navbar() {
         mode="horizontal"
         defaultSelectedKeys={["interactive"]}
         className="navbar"
-        items={items}
+        items={role === 'admin' ? [...items, adminLink] : items}
       >
       </Menu>
       <div>
@@ -41,7 +41,7 @@ function Navbar() {
           <Link to="/login">Login</Link>
         </Button>
       </div>
-    </div>
+    </div >
   );
 }
 

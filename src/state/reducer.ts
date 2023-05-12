@@ -19,11 +19,15 @@ export const authReducer = (state: State, action: Action): State => {
       ) {
         throw Error("Invalid token");
       }
+      let role: State['role'] = 'none';
+      if ("role" in decoded && typeof decoded.role === "string" && (decoded.role === 'none' || decoded.role === 'admin'))
+        role = decoded.role;
       return {
         ...state,
         token: action.payload.token,
         expiration: decoded.exp,
         username: decoded.sub,
+        role,
       };
     }
     case "LOGOUT":

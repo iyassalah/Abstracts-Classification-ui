@@ -1,10 +1,11 @@
 export type State = {
     token: string | null;
     expiration: number | null;
+    username: string | null;
+    role: 'none' | 'admin' | null;
     login(token: string): void;
     logout(): void;
     isTokenExpired(): boolean;
-    username: string | null;
 }
 export const initialState: State = {
     token: localStorage.getItem("token"),
@@ -19,6 +20,7 @@ export const initialState: State = {
     },
     expiration: null,
     username: null,
+    role: null,
 };
 
 export type Logout = {
