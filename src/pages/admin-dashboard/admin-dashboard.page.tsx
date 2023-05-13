@@ -7,6 +7,7 @@ import { useContext } from 'react';
 
 import { AuthContext } from '../../state/reducer';
 import { ICreateAdmin } from '../../types/responses';
+import ClassManagement from '../../components/class-management/class-management';
 
 const { TabPane } = Tabs;
 
@@ -66,7 +67,7 @@ function AdminDashboard() {
             <h1>Statistics</h1>
           </TabPane>
           <TabPane tab="Classes Management" key="class-management">
-            <h1>Classes Management</h1>
+            <ClassManagement />
           </TabPane>
           <TabPane
             tab={
