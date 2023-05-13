@@ -21,9 +21,13 @@ function ClassManagement() {
   const handleUpdateDisplayedName = (
     internalName: string,
     displayedName: string,
+    token: string
   ) => {
     axios
-      .put(`/classes/${internalName}`, { displayedName }, {
+      .put(`/classes/${encodeURIComponent(internalName)}`, null, {
+        params: {
+          displayed_name: displayedName,
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -36,7 +40,7 @@ function ClassManagement() {
         message.error("Displayed name update failed");
       });
   };
-  
+
 
   return (
     <div className="class-management">
@@ -51,7 +55,7 @@ function ClassManagement() {
                 <Input
                   defaultValue={c.displayedName}
                   onBlur={(e) =>
-                    handleUpdateDisplayedName(c.internalName, e.target.value)
+                    handleUpdateDisplayedName(c.internalName, e.target.value, token)
                   }
                 />
               </Form.Item>
