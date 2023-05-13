@@ -21,7 +21,6 @@ function ClassManagement() {
   const handleUpdateDisplayedName = (
     internalName: string,
     displayedName: string,
-    token: string
   ) => {
     axios
       .put(`/classes/${internalName}`, { displayedName }, {
@@ -52,7 +51,7 @@ function ClassManagement() {
                 <Input
                   defaultValue={c.displayedName}
                   onBlur={(e) =>
-                    handleUpdateDisplayedName(c.internalName, e.target.value, token)
+                    handleUpdateDisplayedName(c.internalName, e.target.value)
                   }
                 />
               </Form.Item>
