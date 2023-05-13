@@ -18,11 +18,11 @@ const MultiUpload: React.FC = () => {
         onChange({ file }) {
             if (file.status === 'removed')
                 return;
-            if (file.response && (file.status === 'success' || file.status === 'done')) {
+            const { response, name, uid, status } = file;
+            if (response !== undefined && (file.status === 'success' || file.status === 'done')) {
                 dispatch({
                     type: 'ADD_LABELLED_PDF',
-                    uid: file.uid,
-                    file,
+                    file: { response, name, uid, status },
                 })
             }
             const err: unknown = file.error;

@@ -2,14 +2,15 @@ import React, { createContext, useReducer } from 'react';
 import { LabelledPDF } from '../types/responses';
 import { UploadFile } from 'antd';
 
+type UploadedPDF = UploadFile<LabelledPDF> & { response: NonNullable<UploadFile<LabelledPDF>['response']> };
+
 export type State = {
-    fileList: UploadFile<LabelledPDF>[];
+    fileList: UploadedPDF[];
 };
 
 interface AddPayload {
     type: 'ADD_LABELLED_PDF';
-    file: UploadFile<LabelledPDF>;
-    uid: string;
+    file: UploadedPDF;
 }
 
 interface RemovePayload {
@@ -28,20 +29,9 @@ export const initialState: State = {
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case 'ADD_LABELLED_PDF':
-            return {
-                ...state,
-                fileList: [
-                    ...state.fileList, {
-                        response: action.file.response,
-                        name: action.file.name,
-                        uid: action.file.uid,
-                        status: 'done',
-                    }
-                ]
-            }
+            return { ...state, fileList: [...state.fileList, action.file] }
         case 'REMOVE_LABELLED_PDF':
             return { ...state, fileList: state.fileList.filter(e => e.uid !== action.uid) };
-            break;
     }
 };
 
