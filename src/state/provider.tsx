@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { AuthContext, authReducer } from "./reducer";
+import { AuthContext, authReducer, validateToken } from "./reducer";
 import { State, initialState } from "./state";
 
 interface IAuthProviderProps {
@@ -7,16 +7,24 @@ interface IAuthProviderProps {
 }
 
 const AuthProvider = ({ children }: IAuthProviderProps) => {
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const [state, dispatch] = useReducer(authReducer, validateToken(initialState));
 
   const login: State["login"] = (token) => {
     dispatch({
       type: "LOGIN",
       payload: {
-        token,
+        token
       },
     });
-    localStorage.setItem("token", token);
+    console.log(state);
+    if (state.expiration)
+      localStorage.setItem("expiration", state.expiration.toString());
+    if (state.username)
+      localStorage.setItem("username", state.username);
+    if (state.token)
+      localStorage.setItem("token", state.token);
+    if (state.role)
+      localStorage.setItem("role", state.role);
   };
 
   const logout = () => {

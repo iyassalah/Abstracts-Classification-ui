@@ -7,8 +7,12 @@ export type State = {
     logout(): void;
     isTokenExpired(): boolean;
 }
+
 export const initialState: State = {
     token: localStorage.getItem("token"),
+    username: localStorage.getItem("username"),
+    role: (localStorage.getItem("role") === 'admin' ? 'admin' : 'none'),
+    expiration: +(localStorage.getItem("expiration") ?? 0),
     login() {
         return
     },
@@ -18,9 +22,6 @@ export const initialState: State = {
     isTokenExpired() {
         return true;
     },
-    expiration: null,
-    username: null,
-    role: null,
 };
 
 export type Logout = {

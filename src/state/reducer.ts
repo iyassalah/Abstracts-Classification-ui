@@ -4,6 +4,21 @@ import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext<State>(initialState);
 
+export function validateToken(state: State): State {
+  const currTimeInSeconds = (new Date().getTime() / 1000);
+  if (state.expiration && state.expiration < currTimeInSeconds) {
+    return {
+      ...state,
+      token: null,
+      expiration: null,
+      username: null,
+      role: 'none',
+    };
+  } else {
+    return state;
+  }
+}
+
 export const authReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "LOGIN": {
@@ -38,15 +53,7 @@ export const authReducer = (state: State, action: Action): State => {
         expiration: null,
       };
     case "CHECK_EXPIRATION":
-      if (state.expiration && state.expiration < new Date().getTime()) {
-        return {
-          ...state,
-          token: null,
-          expiration: null,
-        };
-      } else {
-        return state;
-      }
+      return validateToken(state);
   }
 };
 
