@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Table } from "antd";
 import axios from "axios";
 import { AuthContext } from "../../state/reducer";
+import "./class-management.scss";
 
 interface IClass {
   internalName: string;
@@ -10,12 +11,17 @@ interface IClass {
 
 function ClassManagement() {
   const [classes, setClasses] = useState<IClass[]>([]);
+  const [loading, setLoading] = useState(false);
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    axios.get("/classes").then((response) => {
-      setClasses(response.data.classes);
-    });
+    setLoading(true);
+    axios
+      .get("/classes")
+      .then((response) => {
+        setClasses(response.data.classes);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const handleUpdateDisplayedName = (
@@ -23,6 +29,7 @@ function ClassManagement() {
     displayedName: string,
     token: string
   ) => {
+    setLoading(true);
     axios
       .put(`/classes/${encodeURIComponent(internalName)}`, null, {
         params: {
@@ -32,36 +39,48 @@ function ClassManagement() {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((response) => {
+      .then(() => {
         message.success("Displayed name updated successfully");
       })
       .catch((error) => {
         console.error(error);
         message.error("Displayed name update failed");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
+  const columns = [
+    {
+      title: "Internal Name",
+      dataIndex: "internalName",
+      key: "internalName",
+    },
+    {
+      title: "Displayed Name",
+      dataIndex: "displayedName",
+      key: "displayedName",
+      render: (text: string, record: IClass) => (
+        <Input
+          defaultValue={text}
+          onBlur={(e) =>
+            handleUpdateDisplayedName(record.internalName, e.target.value, token)
+          }
+        />
+      ),
+    },
+  ];
 
   return (
     <div className="class-management">
       <h1>Classes Management</h1>
       <hr />
       <div className="class-management-body">
-        {classes.map((c) => (
-          <div key={c.internalName} className="class-management-item">
-            <Form layout="inline">
-              <Form.Item label="Internal Name">{c.internalName}</Form.Item>
-              <Form.Item label="Displayed Name">
-                <Input
-                  defaultValue={c.displayedName}
-                  onBlur={(e) =>
-                    handleUpdateDisplayedName(c.internalName, e.target.value, token)
-                  }
-                />
-              </Form.Item>
-            </Form>
-          </div>
-        ))}
+        <Table
+          dataSource={classes}
+          columns={columns}
+          loading={loading}
+          pagination={false}
+        />
       </div>
     </div>
   );
