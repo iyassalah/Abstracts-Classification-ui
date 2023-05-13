@@ -8,21 +8,22 @@ import './multiupload.scss';
 
 
 const MultiUpload: React.FC = () => {
-    const { dispatch } = useContext(ResultsContext);
+    const { dispatch, state: { fileList } } = useContext(ResultsContext);
 
     const props: UploadProps<LabelledPDF> = {
+        action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
         name: 'file',
         multiple: true,
+        defaultFileList: fileList,
         onChange({ file }) {
-            if (file.response && file.status === 'success') {
+            if (file.response && (file.status === 'success' || file.status === 'done')) {
                 dispatch({
-                    labelledPDF: file.response,
                     type: 'ADD_LABELLED_PDF',
-                    uid: file.uid
+                    uid: file.uid,
+                    file,
                 })
             }
         },
-        action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
         onRemove({ uid }) {
             dispatch({
                 type: 'REMOVE_LABELLED_PDF',

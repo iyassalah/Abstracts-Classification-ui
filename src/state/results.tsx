@@ -1,13 +1,14 @@
 import React, { createContext, useReducer } from 'react';
 import { LabelledPDF } from '../types/responses';
+import { UploadFile } from 'antd';
 
 export type State = {
-    labelledPDFs: Record<string, LabelledPDF>;
+    fileList: UploadFile<LabelledPDF>[];
 };
 
 interface AddPayload {
     type: 'ADD_LABELLED_PDF';
-    labelledPDF: LabelledPDF;
+    file: UploadFile<LabelledPDF>;
     uid: string;
 }
 
@@ -21,7 +22,7 @@ export type Action =
     | RemovePayload;
 
 export const initialState: State = {
-    labelledPDFs: {},
+    fileList: []
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -29,17 +30,18 @@ export const reducer = (state: State, action: Action): State => {
         case 'ADD_LABELLED_PDF':
             return {
                 ...state,
-                labelledPDFs: { ...state.labelledPDFs, [action.uid]: action.labelledPDF },
-            };
-        case 'REMOVE_LABELLED_PDF': {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { [action.uid]: _, ...rest } = state.labelledPDFs;
-            const res =  {
-                // ...state,
-                labelledPDFs: rest
+                fileList: [
+                    ...state.fileList, {
+                        response: action.file.response,
+                        name: action.file.name,
+                        uid: action.file.uid,
+                        status: 'done',
+                    }
+                ]
             }
-            return res;
-        }
+        case 'REMOVE_LABELLED_PDF':
+            return { ...state, fileList: state.fileList.filter(e => e.uid !== action.uid) };
+            break;
     }
 };
 
