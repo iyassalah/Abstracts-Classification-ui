@@ -35,14 +35,21 @@ function Navbar(props: IProps) {
 
   return (
     <div className="navbar-wrapper">
-      <Menu
-        mode="horizontal"
-        defaultSelectedKeys={["interactive"]}
-        className="navbar"
-        items={role === 'admin' ? [...items, adminLink] : items}
-      >
-      </Menu>
+      <div className='left-group'>
+        <Menu
+          mode="horizontal"
+          defaultSelectedKeys={["interactive"]}
+          className="navbar"
+          items={role === 'admin' ? [...items, adminLink] : items}
+        />
+      </div>
       <div className='right-group'>
+        <Switch
+          defaultChecked={!props.darkTheme}
+          onChange={e => props.toggle(!e.valueOf())}
+          checkedChildren={<BulbFilled />}
+          unCheckedChildren={<BulbOutlined />}
+        />
         <div>{token === null ? (
           <Button>
             <Link to="/login">Login</Link>
@@ -53,12 +60,6 @@ function Navbar(props: IProps) {
           </div>
         )}
         </div>
-        <Switch
-          defaultChecked={!props.darkTheme}
-          onChange={e => props.toggle(!e.valueOf())}
-          checkedChildren={<BulbFilled />}
-          unCheckedChildren={<BulbOutlined />}
-        />
       </div>
     </div>
   );

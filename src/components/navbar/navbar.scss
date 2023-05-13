@@ -3,19 +3,24 @@
   justify-content: space-around;
   align-items: center;
 
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    width: 30rem;
+  .left-group {
+    flex-grow: 4;
+
+    .navbar {
+      width: 100%;
+      display: flex;
+    }
   }
 
   .right-group {
+    flex-grow: 1;
+    width: fit-content;
     display: flex;
     align-items: center;
     align-content: center;
 
     &>* {
-      padding-right: 8px;
+      padding: 0 8px 0 8px;
     }
   }
 }
