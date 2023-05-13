@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import { BulbFilled, BulbOutlined } from '@ant-design/icons';
+import { Button, Menu, Switch } from "antd";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Menu, Button, Switch } from "antd";
-import "./navbar.scss";
 import { AuthContext } from "../../state/reducer";
+import "./navbar.scss";
 
 interface IProps {
   toggle(mode: boolean): void;
@@ -51,7 +52,12 @@ function Navbar(props: IProps) {
         </div>
       )}
       </div>
-      <Switch defaultChecked={props.darkTheme} onChange={e => props.toggle(e.valueOf())} />
+      <Switch
+        defaultChecked={!props.darkTheme}
+        onChange={e => props.toggle(!e.valueOf())}
+        checkedChildren={<BulbFilled />}
+        unCheckedChildren={<BulbOutlined />}
+      />
     </div>
   );
 }
