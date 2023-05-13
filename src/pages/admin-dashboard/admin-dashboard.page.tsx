@@ -1,10 +1,12 @@
-import { useContext, useRef } from "react";
-import { Input, Form, Button, Tabs, message } from "antd";
-import axios from "axios";
-import "./admin-dashboard.scss";
-import { AuthContext } from "../../state/reducer";
-import { ICreateAdmin } from "../../types/responses";
-import { FormInstance } from "antd/es/form/Form";
+import './admin-dashboard.scss';
+
+import { Button, Form, Input, message, Tabs } from 'antd';
+import { useForm } from 'antd/es/form/Form';
+import axios from 'axios';
+import { useContext } from 'react';
+
+import { AuthContext } from '../../state/reducer';
+import { ICreateAdmin } from '../../types/responses';
 
 const { TabPane } = Tabs;
 
@@ -16,11 +18,11 @@ type FormValues = {
 
 function AdminDashboard() {
   const { token } = useContext(AuthContext);
-  const formRef = useRef<FormInstance>(null);
-  
+  const [form] = useForm<FormValues>();
+
   const handleCreateUser = (values: FormValues) => {
     const { username, email, password } = values;
-  
+
     axios
       .post<ICreateAdmin>(
         "/admin",
@@ -39,9 +41,8 @@ function AdminDashboard() {
       .then((response) => {
         console.log(response.data);
         message.success('User created successfully');
-        if (formRef.current) {
-          formRef.current.resetFields();
-        }
+        form.resetFields();
+
       })
       .catch((error) => {
         console.error(error);
@@ -50,9 +51,7 @@ function AdminDashboard() {
   };
 
   const handleCancel = () => {
-    if (formRef.current) {
-      formRef.current.resetFields();
-    }  
+    form.resetFields();
   }
 
   return (
@@ -78,7 +77,7 @@ function AdminDashboard() {
             key="create-admin-user"
           >
             <div className="admin-dashboard-create-user-form">
-              <Form ref={formRef} layout="vertical" onFinish={handleCreateUser}>
+              <Form form={form} layout="vertical" onFinish={handleCreateUser}>
                 <Form.Item
                   name="email"
                   label="Email"
