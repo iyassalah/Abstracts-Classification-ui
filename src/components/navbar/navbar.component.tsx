@@ -1,10 +1,14 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Menu, Button } from "antd";
+import { Menu, Button, Switch } from "antd";
 import "./navbar.scss";
 import { AuthContext } from "../../state/reducer";
 
-function Navbar() {
+interface IProps {
+  toggle(): void;
+}
+
+function Navbar(props: IProps) {
   const { token, username, role, logout } = useContext(AuthContext);
 
   const items = [
@@ -46,6 +50,7 @@ function Navbar() {
         </div>
       )}
       </div>
+      <Switch onChange={() => props.toggle()} />
     </div>
   );
 }
