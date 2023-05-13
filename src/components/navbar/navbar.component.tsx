@@ -45,20 +45,22 @@ function Navbar(props: IProps) {
       </div>
       <div className='right-group'>
         <Switch
+          className='theme-switch'
           defaultChecked={!props.darkTheme}
           onChange={e => props.toggle(!e.valueOf())}
           checkedChildren={<BulbFilled />}
           unCheckedChildren={<BulbOutlined />}
         />
-        <div>{token === null ? (
-          <Button>
-            <Link to="/login">Login</Link>
-          </Button>) : (
-          <div>
-            <span>Welcome, {username + " "}</span>
-            <Button onClick={logout}>Logout</Button>
-          </div>
-        )}
+        <div className='login-btn'>
+          {token === null ? (
+            <Button>
+              <Link to="/login">Login</Link>
+            </Button>) : (
+            <div>
+              <span>Welcome, {username + " "}</span>
+              <Button onClick={logout}>Logout</Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

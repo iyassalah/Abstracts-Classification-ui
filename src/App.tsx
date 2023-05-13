@@ -7,7 +7,7 @@ import LoginForm from "./pages/login/login.page";
 import NotFound from "./pages/notfound/notfound.page";
 import { Routes, Route } from "react-router-dom";
 import { ConfigProvider, Layout } from "antd";
-import { useTheme } from "./hooks/theme";
+import { useTheme } from "./hooks/theme.hook";
 import AdminDashboard from "./pages/admin-dashboard/admin-dashboard.page";
 
 function App() {
