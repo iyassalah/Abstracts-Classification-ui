@@ -42,22 +42,24 @@ function Navbar(props: IProps) {
         items={role === 'admin' ? [...items, adminLink] : items}
       >
       </Menu>
-      <div>{token === null ? (
-        <Button>
-          <Link to="/login">Login</Link>
-        </Button>) : (
-        <div>
-          <span>Welcome, {username + " "}</span>
-          <Button onClick={logout}>Logout</Button>
+      <div className='right-group'>
+        <div>{token === null ? (
+          <Button>
+            <Link to="/login">Login</Link>
+          </Button>) : (
+          <div>
+            <span>Welcome, {username + " "}</span>
+            <Button onClick={logout}>Logout</Button>
+          </div>
+        )}
         </div>
-      )}
+        <Switch
+          defaultChecked={!props.darkTheme}
+          onChange={e => props.toggle(!e.valueOf())}
+          checkedChildren={<BulbFilled />}
+          unCheckedChildren={<BulbOutlined />}
+        />
       </div>
-      <Switch
-        defaultChecked={!props.darkTheme}
-        onChange={e => props.toggle(!e.valueOf())}
-        checkedChildren={<BulbFilled />}
-        unCheckedChildren={<BulbOutlined />}
-      />
     </div>
   );
 }
