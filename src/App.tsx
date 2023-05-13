@@ -11,14 +11,13 @@ import { useTheme } from "./hooks/theme";
 import AdminDashboard from "./pages/admin-dashboard/admin-dashboard.page";
 
 function App() {
-  const { themeProps, toggle, token } = useTheme(true);
-  console.log(themeProps)
+  const { themeProps, toggle, token, darkTheme } = useTheme(true);
   return (
     <ConfigProvider {...themeProps}>
       <div className="">
         <Layout>
           <Layout.Header className="layout-header" style={{ backgroundColor: token.colorBgContainer }}>
-            <Navbar toggle={toggle} />
+            <Navbar toggle={toggle} darkTheme={darkTheme} />
           </Layout.Header>
           <Layout.Content className="app">
             <Routes>
@@ -27,8 +26,8 @@ function App() {
               <Route path="batch" element={<Batch />}></Route>
               <Route path="results" element={<Results />}></Route>
               <Route path="login" element={<LoginForm />}></Route>
-              <Route path="adminDashboard" element={<AdminDashboard/>}></Route>
-            <Route path="*" element={<NotFound />}></Route>
+              <Route path="adminDashboard" element={<AdminDashboard />}></Route>
+              <Route path="*" element={<NotFound />}></Route>
             </Routes>
           </Layout.Content>
         </Layout>

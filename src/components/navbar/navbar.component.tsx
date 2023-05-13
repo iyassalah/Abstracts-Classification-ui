@@ -5,7 +5,8 @@ import "./navbar.scss";
 import { AuthContext } from "../../state/reducer";
 
 interface IProps {
-  toggle(): void;
+  toggle(mode: boolean): void;
+  darkTheme: boolean;
 }
 
 function Navbar(props: IProps) {
@@ -50,7 +51,7 @@ function Navbar(props: IProps) {
         </div>
       )}
       </div>
-      <Switch onChange={() => props.toggle()} />
+      <Switch defaultChecked={props.darkTheme} onChange={e => props.toggle(e.valueOf())} />
     </div>
   );
 }

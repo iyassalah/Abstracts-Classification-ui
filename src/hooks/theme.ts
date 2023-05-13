@@ -8,13 +8,12 @@ export function useTheme(darkMode = false) {
     const themeProps: ConfigProviderProps = {
         theme: { algorithm }
     } as const;
-    const toggle = () => {
-        console.log(themeProps);
-        setDarkMode(mode => !mode)
+    const toggle = (mode: boolean) => {
+        setDarkMode(mode)
     };
     const { defaultSeed } = theme;
     const token = algorithm(defaultSeed);
-    return { themeProps, toggle, token };
+    return { themeProps, toggle, token, darkTheme: DarkMode };
 }
 
 
