@@ -14,7 +14,7 @@ function App() {
   const { themeProps, toggle, token, darkTheme } = useTheme(true);
   return (
     <ConfigProvider {...themeProps}>
-      <div className="">
+      <div className={`app-wrapper${darkTheme ? ' dark' : ''}`}>
         <Layout>
           <Layout.Header className="layout-header" style={{ backgroundColor: token.colorBgContainer }}>
             <Navbar toggle={toggle} darkTheme={darkTheme} />

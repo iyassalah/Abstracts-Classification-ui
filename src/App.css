@@ -18,3 +18,7 @@ body {
   padding: 0 50px;
   width: 100%;
 }
+
+.dark {
+  color: white;
+}
