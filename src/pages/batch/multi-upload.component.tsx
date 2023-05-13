@@ -1,5 +1,5 @@
 import { InboxOutlined } from '@ant-design/icons';
-import type { UploadProps } from 'antd';
+import { UploadProps, message } from 'antd';
 import Dragger from 'antd/es/upload/Dragger';
 import React, { useContext } from 'react';
 import { ResultsContext } from '../../state/results';
@@ -16,6 +16,8 @@ const MultiUpload: React.FC = () => {
         multiple: true,
         defaultFileList: fileList,
         onChange({ file }) {
+            if (file.status === 'removed')
+                return;
             if (file.response && (file.status === 'success' || file.status === 'done')) {
                 dispatch({
                     type: 'ADD_LABELLED_PDF',
@@ -23,6 +25,10 @@ const MultiUpload: React.FC = () => {
                     file,
                 })
             }
+            const err: unknown = file.error;
+            if (err && typeof err === 'object' && 'status' in err && err.status === 400)
+                message.error("Could not extract abstract from PDF file.");
+
         },
         onRemove({ uid }) {
             dispatch({
