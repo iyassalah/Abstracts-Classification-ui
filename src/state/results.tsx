@@ -2,14 +2,26 @@ import React, { createContext, useReducer } from 'react';
 import { LabelledPDF } from '../types/responses';
 
 export type State = {
-    labelledPDFs: LabelledPDF[];
+    labelledPDFs: Record<string, LabelledPDF>;
 };
 
+interface AddPayload {
+    type: 'ADD_LABELLED_PDF';
+    labelledPDF: LabelledPDF;
+    uid: string;
+}
+
+interface RemovePayload {
+    type: 'REMOVE_LABELLED_PDF';
+    uid: string;
+}
+
 export type Action =
-    | { type: 'ADD_LABELLED_PDF'; labelledPDF: LabelledPDF };
+    | AddPayload
+    | RemovePayload;
 
 export const initialState: State = {
-    labelledPDFs: [],
+    labelledPDFs: {},
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -17,10 +29,17 @@ export const reducer = (state: State, action: Action): State => {
         case 'ADD_LABELLED_PDF':
             return {
                 ...state,
-                labelledPDFs: [...state.labelledPDFs, action.labelledPDF],
+                labelledPDFs: { ...state.labelledPDFs, [action.uid]: action.labelledPDF },
             };
-        default:
-            return state;
+        case 'REMOVE_LABELLED_PDF': {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { [action.uid]: _, ...rest } = state.labelledPDFs;
+            const res =  {
+                // ...state,
+                labelledPDFs: rest
+            }
+            return res;
+        }
     }
 };
 

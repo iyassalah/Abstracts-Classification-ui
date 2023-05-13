@@ -1,30 +1,34 @@
-import React, { useContext } from 'react';
-import './multiupload.scss'
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import Dragger from 'antd/es/upload/Dragger';
-import { LabelledPDF } from '../../types/responses';
+import React, { useContext } from 'react';
 import { ResultsContext } from '../../state/results';
+import { LabelledPDF } from '../../types/responses';
+import './multiupload.scss';
 
 
 const MultiUpload: React.FC = () => {
-    const res: LabelledPDF[] = [];
     const { dispatch } = useContext(ResultsContext);
 
     const props: UploadProps<LabelledPDF> = {
         name: 'file',
         multiple: true,
-        onChange({ file: { response } }) {
-            if (response) {
-                res.push(response);
-                console.log(response);
+        onChange({ file }) {
+            if (file.response && file.status === 'success') {
                 dispatch({
-                    labelledPDF: response,
+                    labelledPDF: file.response,
                     type: 'ADD_LABELLED_PDF',
+                    uid: file.uid
                 })
             }
         },
         action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
+        onRemove({ uid }) {
+            dispatch({
+                type: 'REMOVE_LABELLED_PDF',
+                uid
+            })
+        },
     };
     return (
         <div className='multiupload-wrapper'>

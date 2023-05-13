@@ -4,7 +4,6 @@ import { ResultsContext } from '../../state/results';
 
 const Results = () => {
   const { state: { labelledPDFs } } = useContext(ResultsContext)
-
   return (
     <div className="container">
       <h1 className="header">Here are the results</h1>

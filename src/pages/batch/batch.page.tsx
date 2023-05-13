@@ -5,11 +5,9 @@ import MultiUpload from "./multi-upload.component";
 
 const Batch = () => {
   return (
-    <>
       <div className="container">
         <MultiUpload />
       </div>
-    </>
   );
 };
 
