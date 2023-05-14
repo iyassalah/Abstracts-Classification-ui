@@ -26,7 +26,7 @@ const columns = [
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    render: (text, record) => (
+    render: (text: string, record: { status: string; }) => (
       <span>
         {record.status === 'done' && <span style={{ color: 'green' }}>Uploaded</span>}
         {record.status === 'uploading' && <span style={{ color: 'blue' }}>Uploading</span>}
