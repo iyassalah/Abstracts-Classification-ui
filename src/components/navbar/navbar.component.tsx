@@ -2,7 +2,7 @@ import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 import { Button, Menu, Switch } from "antd";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../state/reducer";
+import { AuthContext } from "../../state/auth/reducer";
 import "./navbar.scss";
 
 interface IProps {

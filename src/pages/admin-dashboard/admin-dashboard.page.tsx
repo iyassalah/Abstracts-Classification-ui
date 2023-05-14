@@ -5,7 +5,7 @@ import { useForm } from 'antd/es/form/Form';
 import axios from 'axios';
 import { useContext } from 'react';
 
-import { AuthContext } from '../../state/reducer';
+import { AuthContext } from '../../state/auth/reducer';
 import { ICreateAdmin } from '../../types/responses';
 
 const { TabPane } = Tabs;
