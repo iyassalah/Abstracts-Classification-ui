@@ -6,8 +6,8 @@ import axios from 'axios';
 import { useContext } from 'react';
 
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../../state/provider';
-import { AuthStatus } from '../../state/state';
+import { AuthContext } from '../../state/auth/provider';
+import { AuthStatus } from '../../state/auth/state';
 import { ICreateAdmin } from '../../types/responses';
 
 const { TabPane } = Tabs;

@@ -2,9 +2,9 @@ import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 import { Button, Menu, Switch } from "antd";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../state/provider";
+import { AuthContext } from "../../state/auth/provider";
 import "./navbar.scss";
-import { AuthStatus } from '../../state/state';
+import { AuthStatus } from '../../state/auth/state';
 
 interface IProps {
   toggle(mode: boolean): void;
