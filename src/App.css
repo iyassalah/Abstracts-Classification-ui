@@ -5,7 +5,8 @@ body {
 .app {
   width: 80%;
   margin: auto;
-  height: 93vh;
+  min-height: 100vh;
+  height: auto;
 }
 
 .layout {
