@@ -14,3 +14,8 @@ export interface LabelledPDF {
     pred: Probabilities;
     inferred_abstract: string;
 }
+
+
+export interface ICreateAdmin {
+    user_id: string;
+}

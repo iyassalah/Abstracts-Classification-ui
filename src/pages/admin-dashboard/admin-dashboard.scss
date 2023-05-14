@@ -1,0 +1,19 @@
+$modal-width: 600px;
+$modal-body-padding: 40px;
+
+.admin-dashboard {
+  padding: 10px;
+
+  .create-user-btn {
+    margin-bottom: 5px;
+    margin-left: auto;
+  }
+
+  .ant-divider-horizontal {
+    margin: 10px 0;
+  }
+}
+
+.ant-tabs {
+  flex: 1;
+}
