@@ -1,28 +1,31 @@
-export type State = {
-    token: string | null;
-    expiration: number | null;
-    username: string | null;
-    role: 'none' | 'admin' | null;
-    login(token: string): void;
-    logout(): void;
-    isTokenExpired(): boolean;
+import { decodeToken } from "./reducer";
+
+export enum AuthStatus {
+    LOGGED_IN, LOGGED_OUT
 }
 
-export const initialState: State = {
-    token: localStorage.getItem("token"),
-    username: localStorage.getItem("username"),
-    role: (localStorage.getItem("role") === 'admin' ? 'admin' : 'none'),
-    expiration: +(localStorage.getItem("expiration") ?? 0),
-    login() {
-        return
-    },
-    logout() {
-        return
-    },
-    isTokenExpired() {
-        return true;
-    },
-};
+export interface ILoggedIn {
+    status: AuthStatus.LOGGED_IN
+    token: string;
+    expiration: number;
+    username: string;
+    role: 'none' | 'admin';
+}
+
+interface ILoggedOut {
+    status: AuthStatus.LOGGED_OUT;
+}
+
+export type AuthState = ILoggedIn | ILoggedOut;
+
+export function getInitialState(): AuthState {
+    const token = localStorage.getItem('token');
+    if (token === null)
+        return { status: AuthStatus.LOGGED_OUT }
+    return {
+        ...decodeToken(token)
+    }
+}
 
 export type Logout = {
     type: 'LOGOUT',
