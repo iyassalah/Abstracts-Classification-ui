@@ -15,20 +15,31 @@ const MultiUpload: React.FC = () => {
         name: 'file',
         multiple: true,
         defaultFileList: fileList,
-        onChange({ file }) {
-            if (file.status === 'removed')
-                return;
+        onChange({ file, fileList }) {
             const { response, name, uid, status } = file;
-            if (response !== undefined && (file.status === 'success' || file.status === 'done')) {
+            if (status === 'uploading') {
+                dispatch({ type: 'SET_UPLOAD_FLAG', flag: true });
+                return;
+            }
+            if (status === 'removed') {
+                dispatch({ type: 'SET_UPLOAD_FLAG', flag: fileList.some(file => file.status === 'uploading') });
+                return;
+            }
+            if (response !== undefined && (status === 'success' || status === 'done')) {
                 dispatch({
                     type: 'ADD_LABELLED_PDF',
                     file: { response, name, uid, status },
+                    flag: fileList.some(file => file.status === 'uploading')
                 })
+                return;
             }
+            if (status === 'error')
+                dispatch({ type: 'SET_UPLOAD_FLAG', flag: false })
+            else
+                return;
             const err: unknown = file.error;
             if (err && typeof err === 'object' && 'status' in err && err.status === 400)
                 message.error("Could not extract abstract from PDF file.");
-
         },
         onRemove({ uid }) {
             dispatch({
@@ -46,7 +57,7 @@ const MultiUpload: React.FC = () => {
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
                     <p className="ant-upload-hint">
-                        Hints
+                        {fileList.length ? "Please don't leave the page while your files still being uploaded" : ''}
                     </p>
                 </div>
             </Dragger>

@@ -6,32 +6,45 @@ type UploadedPDF = UploadFile<LabelledPDF> & { response: NonNullable<UploadFile<
 
 export type State = {
     fileList: UploadedPDF[];
+    busy: boolean;
 };
 
-interface AddPayload {
+interface IAddPayload {
     type: 'ADD_LABELLED_PDF';
     file: UploadedPDF;
+    flag?: boolean;
 }
 
-interface RemovePayload {
+interface IRemovePayload {
     type: 'REMOVE_LABELLED_PDF';
     uid: string;
+    flag?: boolean;
+}
+
+interface ISetUploadFlag {
+    type: 'SET_UPLOAD_FLAG';
+    flag: boolean;
 }
 
 export type Action =
-    | AddPayload
-    | RemovePayload;
+    | IAddPayload
+    | IRemovePayload
+    | ISetUploadFlag;
 
 export const initialState: State = {
-    fileList: []
+    fileList: [],
+    busy: false,
 };
 
 export const reducer = (state: State, action: Action): State => {
+    const busy = action?.flag === undefined ? state.busy : action.flag;
     switch (action.type) {
         case 'ADD_LABELLED_PDF':
-            return { ...state, fileList: [...state.fileList, action.file] }
+            return { ...state, busy, fileList: [...state.fileList, action.file] }
         case 'REMOVE_LABELLED_PDF':
-            return { ...state, fileList: state.fileList.filter(e => e.uid !== action.uid) };
+            return { ...state, busy, fileList: state.fileList.filter(e => e.uid !== action.uid) };
+        case 'SET_UPLOAD_FLAG':
+            return { ...state, busy }
     }
 };
 
