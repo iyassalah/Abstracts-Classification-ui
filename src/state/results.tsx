@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { LabelledPDF } from '../types/responses';
 import { UploadFile } from 'antd';
 
-type UploadedPDF = UploadFile<LabelledPDF> & { response: NonNullable<UploadFile<LabelledPDF>['response']> };
+export type UploadedPDF = UploadFile<LabelledPDF> & { response: NonNullable<UploadFile<LabelledPDF>['response']> };
 
 export type State = {
     fileList: UploadedPDF[];

@@ -16,7 +16,7 @@ const MultiUpload: React.FC = () => {
         multiple: true,
         defaultFileList: fileList,
         onChange({ file, fileList }) {
-            const { response, name, uid, status } = file;
+            const { response, name, uid, status, size } = file;
             if (status === 'uploading') {
                 dispatch({ type: 'SET_UPLOAD_FLAG', flag: true });
                 return;
@@ -28,7 +28,7 @@ const MultiUpload: React.FC = () => {
             if (response !== undefined && (status === 'success' || status === 'done')) {
                 dispatch({
                     type: 'ADD_LABELLED_PDF',
-                    file: { response, name, uid, status },
+                    file: { response, name, uid, status, size },
                     flag: fileList.some(file => file.status === 'uploading')
                 })
                 return;
