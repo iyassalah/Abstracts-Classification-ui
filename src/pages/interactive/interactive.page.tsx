@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./interactive.scss";
 import { Button, Input, Tag } from "antd";
+import axios from "axios";
 
 
 const Interactive = () => {
@@ -8,22 +9,25 @@ const Interactive = () => {
   const [tagList, setTagList] = useState([]);
 
   const handleClassify = async () => {
-    const response = await fetch("http://localhost:8000/interactive", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      const response = await axios.post("/active", {
         abstract,
-      }),
-    });
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const data = await response.json();
-    console.log(data.categories);
+      const data = response.data;
+      console.log(data.categories);
 
-    // Update tagList state with response data
-    setTagList(data.categories);
+      // Update tagList state with response data
+      setTagList(data.categories);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   return (
     <>
