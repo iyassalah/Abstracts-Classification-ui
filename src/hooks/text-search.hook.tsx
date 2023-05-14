@@ -127,17 +127,21 @@ function useTextSearch<T>() {
       />
       , [text, record, index]),
   });
-  return { getColumnSearchProps, searchText };
+  return { getColumnSearchProps, searchedText: searchText };
 }
 
 export type TGetColumnSearchProps<T> = ReturnType<typeof useTextSearch<T>>['getColumnSearchProps']
 
 export function useColumnProps<T>(
-  getProps: TGetColumnSearchProps<T>,
+  textSearch: ReturnType<typeof useTextSearch<T>>,
   column: Parameters<TGetColumnSearchProps<T>>[0],
   render?: Parameters<TGetColumnSearchProps<T>>[2]): ColumnType<T> {
   const searchInputRef = useRef<InputRef>(null);
-  return { ...getProps(column, searchInputRef, render) }
+  const query = textSearch.searchedText[column];
+  return {
+    ...textSearch.getColumnSearchProps(column, searchInputRef, render),
+    filteredValue: query ? [query] : null,
+  }
 }
 
 export default useTextSearch;

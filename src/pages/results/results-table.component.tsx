@@ -26,9 +26,9 @@ const ResultsTable = (props: IProps) => {
             authors: new Set(defaulted.map(e => e.author)),
         }); // TODO: fetch from API
     }, []);
-    const { getColumnSearchProps, searchText } = useTextSearch<IAbstract>();
-    const titleSearchProps = useColumnProps(getColumnSearchProps, 'title');
-    const abstractSearchProps = useColumnProps(getColumnSearchProps, 'abstract', (element, [text, record]) => (
+    const textSearch = useTextSearch<IAbstract>();
+    const titleSearchProps = useColumnProps(textSearch, 'title');
+    const abstractSearchProps = useColumnProps(textSearch, 'abstract', (element, [text, record]) => (
         <a
             className="abstract"
             onClick={() =>
@@ -60,7 +60,6 @@ const ResultsTable = (props: IProps) => {
         {
             title: 'Title',
             dataIndex: 'title',
-            filteredValue: searchText['title'] ? [searchText['title']] : null,
             ...titleSearchProps
         },
         {
@@ -76,7 +75,6 @@ const ResultsTable = (props: IProps) => {
             title: 'Abstract',
             dataIndex: 'abstract',
             ellipsis: true,
-            filteredValue: searchText['abstract'] ? [searchText['abstract']] : null,
             ...abstractSearchProps
         },
         {
