@@ -13,3 +13,7 @@ export interface ILogin {
 export interface ICreateAdmin {
     user_id: string;
 }
+
+export interface IGetCLasses {
+    classes: Array<{internalName: string, displayedName: string}>;
+}

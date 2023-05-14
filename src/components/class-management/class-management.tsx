@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Form, Input, message, Table } from "antd";
+import { Input, message, Table } from "antd";
 import axios from "axios";
 import { AuthContext } from "../../state/reducer";
+import { IGetCLasses } from '../../types/responses';
 import "./class-management.scss";
 
 interface IClass {
@@ -16,9 +17,9 @@ function ClassManagement() {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("/classes")
-      .then((response) => {
+    axios.get<IGetCLasses>("/classes")
+    .then((response) => {
+        console.log(response.data.classes)
         setClasses(response.data.classes);
       })
       .finally(() => setLoading(false));
