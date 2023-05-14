@@ -2,8 +2,9 @@ import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 import { Button, Menu, Switch } from "antd";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../state/auth/reducer";
+import { AuthContext } from "../../state/auth/provider";
 import "./navbar.scss";
+import { AuthStatus } from '../../state/auth/state';
 
 interface IProps {
   toggle(mode: boolean): void;
@@ -11,7 +12,7 @@ interface IProps {
 }
 
 function Navbar(props: IProps) {
-  const { token, username, role, logout } = useContext(AuthContext);
+  const { state, logout } = useContext(AuthContext);
 
   const items = [
     {
@@ -40,7 +41,7 @@ function Navbar(props: IProps) {
           mode="horizontal"
           defaultSelectedKeys={["interactive"]}
           className="navbar"
-          items={role === 'admin' ? [...items, adminLink] : items}
+          items={state.status === AuthStatus.LOGGED_IN && state.role === 'admin' ? [...items, adminLink] : items}
         />
       </div>
       <div className='right-group'>
@@ -52,12 +53,12 @@ function Navbar(props: IProps) {
           unCheckedChildren={<BulbOutlined />}
         />
         <div className='login-btn'>
-          {token === null ? (
+          {state.status === AuthStatus.LOGGED_OUT ? (
             <Button>
               <Link to="/login">Login</Link>
             </Button>) : (
             <div>
-              <span>Welcome, {username + " "}</span>
+              <span>Welcome, {state.username + " "}</span>
               <Button onClick={logout}>Logout</Button>
             </div>
           )}

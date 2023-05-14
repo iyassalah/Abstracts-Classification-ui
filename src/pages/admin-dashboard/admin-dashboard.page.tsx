@@ -5,7 +5,9 @@ import { useForm } from 'antd/es/form/Form';
 import axios from 'axios';
 import { useContext } from 'react';
 
-import { AuthContext } from '../../state/auth/reducer';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../../state/auth/provider';
+import { AuthStatus } from '../../state/auth/state';
 import { ICreateAdmin } from '../../types/responses';
 
 const { TabPane } = Tabs;
@@ -17,7 +19,9 @@ type FormValues = {
 }
 
 function AdminDashboard() {
-  const { token } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
+  if (state.status === AuthStatus.LOGGED_OUT)
+    return <Navigate to='/' />;
   const [form] = useForm<FormValues>();
 
   const handleCreateUser = (values: FormValues) => {
@@ -34,7 +38,7 @@ function AdminDashboard() {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${state.token}`,
           },
         }
       )
