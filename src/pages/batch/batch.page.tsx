@@ -17,7 +17,7 @@ const columns = [
     title: 'Size',
     dataIndex: 'size',
     key: 'size',
-    render: (text, record) => {
+    render: (text: string, record: { size: number; }) => {
       const size = record.size / 1024; 
       return <span>{size.toFixed(2)} KB</span>;
     },
