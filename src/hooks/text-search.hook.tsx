@@ -40,7 +40,7 @@ function useTextSearch<T>() {
   const getColumnSearchProps = (
     dataIndex: DataIndex,
     ref: React.RefObject<InputRef>,
-    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => React.ReactNode = e => e
+    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => ReturnType<RenderFuntion> = e => e
   ): ColumnType<T> => ({
     filterDropdown: ({
       setSelectedKeys,

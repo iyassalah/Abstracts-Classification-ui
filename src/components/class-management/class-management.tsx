@@ -3,6 +3,8 @@ import { Input, message, Table } from "antd";
 import axios from "axios";
 import { IGetCLasses } from '../../types/responses';
 import "./class-management.scss";
+import useTextSearch from "../../hooks/text-search.hook";
+import { useColumnProps } from "../../hooks/text-search.hook";
 
 interface IClass {
   internalName: string;
@@ -16,12 +18,13 @@ interface IProps {
 function ClassManagement(props: IProps) {
   const [classes, setClasses] = useState<IClass[]>([]);
   const [loading, setLoading] = useState(false);
+  const search = useTextSearch<IClass>();
+  const internalNameProps = useColumnProps(search, 'internalName');
 
   useEffect(() => {
     setLoading(true);
     axios.get<IGetCLasses>("/classes")
       .then((response) => {
-        console.log(response.data.classes)
         setClasses(response.data.classes);
       })
       .finally(() => setLoading(false));
@@ -30,8 +33,9 @@ function ClassManagement(props: IProps) {
   const handleUpdateDisplayedName = (
     internalName: string,
     displayedName: string,
-    token: string
   ) => {
+    if (classes.some(label => label.displayedName === displayedName && label.internalName === internalName))
+      return;
     setLoading(true);
     axios
       .put(`/classes/${encodeURIComponent(internalName)}`, null, {
@@ -39,7 +43,7 @@ function ClassManagement(props: IProps) {
           displayed_name: displayedName,
         },
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${props.token}`,
         },
       })
       .then(() => {
@@ -51,25 +55,27 @@ function ClassManagement(props: IProps) {
       })
       .finally(() => setLoading(false));
   };
+  const displayedNameProps = useColumnProps(search, 'displayedName', (node, [text, record]) => (
+    <Input
+      defaultValue={text}
+      onBlur={(e) =>
+        handleUpdateDisplayedName(record.internalName, e.target.value)
+      }
+    />
+  ),);
 
   const columns = [
     {
       title: "Internal Name",
       dataIndex: "internalName",
       key: "internalName",
+      ...internalNameProps,
     },
     {
       title: "Displayed Name",
       dataIndex: "displayedName",
       key: "displayedName",
-      render: (text: string, record: IClass) => (
-        <Input
-          defaultValue={text}
-          onBlur={(e) =>
-            handleUpdateDisplayedName(record.internalName, e.target.value, props.token)
-          }
-        />
-      ),
+      ...displayedNameProps,
     },
   ];
 
