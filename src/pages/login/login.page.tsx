@@ -1,15 +1,17 @@
 import { useContext, useState } from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button } from "antd";
 import axios from "axios";
 
 import "./login.scss";
 import * as Response from "../../types/responses";
 import * as Request from "../../types/requests";
 import { AuthContext } from "../../state/auth/provider";
+import useMessage from "antd/es/message/useMessage";
 
 function LoginForm() {
   const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [msgAPI, messageContext] = useMessage();
   const handleLogin = (res: Response.ILogin) => {
     login(res.access_token);
   };
@@ -25,7 +27,7 @@ function LoginForm() {
       });
       handleLogin(response.data)
     } catch (error) {
-      message.error("Login failed. Please try again.");
+      msgAPI.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -33,6 +35,7 @@ function LoginForm() {
 
   return (
     <div className="login-form-wrapper">
+      {messageContext}
       <div className="login-form-container">
         <Form
           onFinish={handleSubmit}

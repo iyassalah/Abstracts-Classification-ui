@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Input, message, Table } from "antd";
+import { Input, Table } from "antd";
 import axios from "axios";
 import { IGetCLasses } from '../../types/responses';
 import "./class-management.scss";
 import useTextSearch from "../../hooks/text-search.hook";
 import { useColumnProps } from "../../hooks/text-search.hook";
+import useMessage from "antd/es/message/useMessage";
 
 interface IClass {
   internalName: string;
@@ -20,6 +21,7 @@ function ClassManagement(props: IProps) {
   const [loading, setLoading] = useState(false);
   const search = useTextSearch<IClass>();
   const internalNameProps = useColumnProps(search, 'internalName');
+  const [msgAPI, messageContext] = useMessage();
 
   useEffect(() => {
     setLoading(true);
@@ -47,11 +49,11 @@ function ClassManagement(props: IProps) {
         },
       })
       .then(() => {
-        message.success("Displayed name updated successfully");
+        msgAPI.success("Displayed name updated successfully");
       })
       .catch((error) => {
         console.error(error);
-        message.error("Displayed name update failed");
+        msgAPI.error("Displayed name update failed");
       })
       .finally(() => setLoading(false));
   };
@@ -81,6 +83,7 @@ function ClassManagement(props: IProps) {
 
   return (
     <div className="class-management">
+      {messageContext}
       <h1>Classes Management</h1>
       <hr />
       <div className="class-management-body">

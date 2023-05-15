@@ -1,14 +1,16 @@
 import { InboxOutlined } from '@ant-design/icons';
-import { UploadProps, message } from 'antd';
+import { UploadProps } from 'antd';
 import Dragger from 'antd/es/upload/Dragger';
 import React, { useContext } from 'react';
 import { ResultsContext } from '../../state/results';
 import { LabelledPDF } from '../../types/responses';
 import './multiupload.scss';
+import useMessage from 'antd/es/message/useMessage';
 
 
 const MultiUpload: React.FC = () => {
     const { dispatch, state: { fileList } } = useContext(ResultsContext);
+    const [msgAPI, messageContext] = useMessage();
 
     const props: UploadProps<LabelledPDF> = {
         action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
@@ -39,7 +41,7 @@ const MultiUpload: React.FC = () => {
                 return;
             const err: unknown = file.error;
             if (err && typeof err === 'object' && 'status' in err && err.status === 400)
-                message.error("Could not extract abstract from PDF file.");
+                msgAPI.error("Could not extract abstract from PDF file.");
         },
         onRemove({ uid }) {
             dispatch({
@@ -50,6 +52,7 @@ const MultiUpload: React.FC = () => {
     };
     return (
         <div className='multiupload-wrapper'>
+            {messageContext}
             <Dragger {...props} className='dragger'>
                 <div className='dragger-children'>
                     <p className="ant-upload-drag-icon">
