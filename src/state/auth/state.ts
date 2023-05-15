@@ -1,7 +1,7 @@
 import { decodeToken } from "./reducer";
 
 export enum AuthStatus {
-    LOGGED_IN, LOGGED_OUT
+    LOGGED_IN = 'logged_in', LOGGED_OUT = 'logged_out'
 }
 
 export interface ILoggedIn {
@@ -14,14 +14,18 @@ export interface ILoggedIn {
 
 interface ILoggedOut {
     status: AuthStatus.LOGGED_OUT;
+    expired?: boolean;
+    attempted?: boolean;
 }
 
 export type AuthState = ILoggedIn | ILoggedOut;
 
 export function getInitialState(): AuthState {
     const token = localStorage.getItem('token');
+    console.log(token);
     if (token === null)
         return { status: AuthStatus.LOGGED_OUT }
+    console.log('here')
     return {
         ...decodeToken(token)
     }

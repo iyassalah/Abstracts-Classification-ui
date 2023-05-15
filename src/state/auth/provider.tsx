@@ -28,8 +28,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
         token
       },
     });
-    if (state.status === AuthStatus.LOGGED_IN)
-      localStorage.setItem("token", state.token);
+    localStorage.setItem("token", token);
   };
 
   const logout = () => {
@@ -44,6 +43,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     return state.status === AuthStatus.LOGGED_IN;
   };
 
+  console.log(state);
   const initialState: AuthContextProps = { state, login, logout, isTokenExpired }
 
   return (

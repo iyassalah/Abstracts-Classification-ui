@@ -2,9 +2,14 @@ import { Action, AuthState, AuthStatus, ILoggedIn } from "./state";
 import jwt_decode from "jwt-decode";
 
 
-export function decodeToken(token: string): AuthState {
-
-  const decoded = jwt_decode(token);
+export function decodeToken(token: string, login = false): AuthState {
+  let decoded: unknown;
+  try {
+    decoded = jwt_decode(token);
+  } catch (error) {
+    return { status: AuthStatus.LOGGED_OUT }
+  }
+  console.log(decoded);
   if (
     !decoded ||
     typeof decoded !== "object" ||
@@ -16,8 +21,9 @@ export function decodeToken(token: string): AuthState {
     throw Error("Invalid token");
   }
   const currTimeInSeconds = (new Date().getTime() / 1000);
-  if (decoded.exp && decoded.exp < currTimeInSeconds) {
-    return { status: AuthStatus.LOGGED_OUT };
+  console.log(decoded, currTimeInSeconds, decoded.exp < currTimeInSeconds);
+  if (decoded.exp < currTimeInSeconds) {
+    return { status: AuthStatus.LOGGED_OUT, expired: true, attempted: login };
   }
 
   let role: ILoggedIn['role'] = 'none';
