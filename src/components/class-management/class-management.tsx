@@ -85,7 +85,7 @@ function ClassManagement(props: IProps) {
       <hr />
       <div className="class-management-body">
         <Table
-          dataSource={classes}
+          dataSource={classes.map((label, i) => ({ ...label, key: i }))}
           columns={columns}
           loading={loading}
           pagination={false}

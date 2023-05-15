@@ -1,6 +1,6 @@
 import './admin-dashboard.scss';
 
-import { Button, Form, Input, message, Tabs } from 'antd';
+import { Button, Form, Input, message, Tabs, TabsProps } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import axios from 'axios';
 import { useContext } from 'react';
@@ -57,6 +57,77 @@ function AdminDashboard() {
     form.resetFields();
   }
 
+  const tabs: TabsProps['items'] = [
+    {
+      key: 'statistics',
+      children: <h1>Statistics</h1>,
+      label: 'Statistics'
+    },
+    {
+      key: 'class-management',
+      children: <ClassManagement token={state.token} />,
+      label: 'Class Management'
+    },
+    {
+      key: 'create-admin-user',
+      children: (
+        <div className="admin-dashboard-create-user-form">
+          <Form form={form} layout="vertical" onFinish={handleCreateUser}>
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[
+                {
+                  type: "email",
+                  message: "Please enter a valid email address",
+                },
+                {
+                  required: true,
+                  message: "Please enter an email address",
+                },
+              ]}
+            >
+              <Input placeholder="Email" size="large" />
+            </Form.Item>
+            <Form.Item
+              name="username"
+              label="Username"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter a username",
+                },
+              ]}
+            >
+              <Input placeholder="Username" size="large" />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              label="Password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter a password",
+                },
+              ]}
+            >
+              <Input.Password placeholder="Password" size="large" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Create User
+              </Button>
+              <Button danger onClick={handleCancel}>
+                Cancel
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      ),
+      label: 'Create Admin User',
+    }
+  ]
+
   return (
     <div className="admin-dashboard">
       <div className="admin-dashboard-body">
@@ -64,75 +135,7 @@ function AdminDashboard() {
       </div>
       <hr />
       <div className="admin-dashboard-header">
-        <Tabs defaultActiveKey="statistics" tabPosition="left">
-          <TabPane tab="Statistics" key="statistics">
-            <h1>Statistics</h1>
-          </TabPane>
-          <TabPane tab="Classes Management" key="class-management">
-            <ClassManagement token={state.token} />
-          </TabPane>
-          <TabPane
-            tab={
-              <span>
-                Create Admin User
-              </span>
-            }
-            key="create-admin-user"
-          >
-            <div className="admin-dashboard-create-user-form">
-              <Form form={form} layout="vertical" onFinish={handleCreateUser}>
-                <Form.Item
-                  name="email"
-                  label="Email"
-                  rules={[
-                    {
-                      type: "email",
-                      message: "Please enter a valid email address",
-                    },
-                    {
-                      required: true,
-                      message: "Please enter an email address",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Email" size="large" />
-                </Form.Item>
-                <Form.Item
-                  name="username"
-                  label="Username"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter a username",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Username" size="large" />
-                </Form.Item>
-                <Form.Item
-                  name="password"
-                  label="Password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter a password",
-                    },
-                  ]}
-                >
-                  <Input.Password placeholder="Password" size="large" />
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Create User
-                  </Button>
-                  <Button danger onClick={handleCancel}>
-                    Cancel
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
-          </TabPane>
-        </Tabs>
+        <Tabs items={tabs} defaultActiveKey="statistics" tabPosition="left" />
       </div>
     </div>
   );
