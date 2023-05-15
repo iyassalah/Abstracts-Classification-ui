@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
 import { Button, Input, Space } from "antd";
 import type { ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
-
-function useTextSearch<T extends { title?: string }>() {
+/**
+ * Returns a function that returns the props to be passed to a column to give it text search
+ */
+function useTextSearch<T>() {
   type DataIndex = keyof T;
   type RenderFuntion = Exclude<ColumnType<T>['render'], undefined>;
 
@@ -28,7 +30,13 @@ function useTextSearch<T extends { title?: string }>() {
     setSearchText({});
   };
 
-
+  /**
+   * 
+   * @param dataIndex Name of the column to title
+   * @param ref an input ref for the search box
+   * @param renderCallback a function to render the text 
+   * @returns props to be passed to the table
+   */
   const getColumnSearchProps = (
     dataIndex: DataIndex,
     ref: React.RefObject<InputRef>,
@@ -119,7 +127,21 @@ function useTextSearch<T extends { title?: string }>() {
       />
       , [text, record, index]),
   });
-  return { getColumnSearchProps, searchText };
+  return { getColumnSearchProps, searchedText: searchText };
+}
+
+export type TGetColumnSearchProps<T> = ReturnType<typeof useTextSearch<T>>['getColumnSearchProps']
+
+export function useColumnProps<T>(
+  textSearch: ReturnType<typeof useTextSearch<T>>,
+  column: Parameters<TGetColumnSearchProps<T>>[0],
+  render?: Parameters<TGetColumnSearchProps<T>>[2]): ColumnType<T> {
+  const searchInputRef = useRef<InputRef>(null);
+  const query = textSearch.searchedText[column];
+  return {
+    ...textSearch.getColumnSearchProps(column, searchInputRef, render),
+    filteredValue: query ? [query] : null,
+  }
 }
 
 export default useTextSearch;
