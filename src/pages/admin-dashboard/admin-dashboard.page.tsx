@@ -9,6 +9,7 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../state/auth/provider';
 import { AuthStatus } from '../../state/auth/state';
 import { ICreateAdmin } from '../../types/responses';
+import ClassManagement from '../../components/class-management/class-management';
 
 const { TabPane } = Tabs;
 
@@ -70,7 +71,7 @@ function AdminDashboard() {
             <h1>Statistics</h1>
           </TabPane>
           <TabPane tab="Classes Management" key="class-management">
-            <h1>Classes Management</h1>
+            <ClassManagement />
           </TabPane>
           <TabPane
             tab={
