@@ -5,16 +5,16 @@ import { Button, Input, Space } from "antd";
 import type { ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
+
+export type SearchedText<T> = Partial<Record<keyof T, string>>;
 /**
  * Returns a function that returns the props to be passed to a column to give it text search
  */
-function useTextSearch<T>() {
+function useTextSearch<T>(intitialSearchText?: SearchedText<T>) {
   type DataIndex = keyof T;
   type RenderFuntion = Exclude<ColumnType<T>['render'], undefined>;
 
-  const [searchText, setSearchText] = useState<
-    Partial<Record<DataIndex, string>>
-  >({});
+  const [searchText, setSearchText] = useState<SearchedText<T>>(intitialSearchText ?? {});
 
   const handleSearch = (
     selectedKeys: string[],

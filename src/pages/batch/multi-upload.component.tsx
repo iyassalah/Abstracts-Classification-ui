@@ -18,23 +18,23 @@ const MultiUpload: React.FC = () => {
         onChange({ file, fileList }) {
             const { response, name, uid, status, size } = file;
             if (status === 'uploading') {
-                dispatch({ type: 'SET_UPLOAD_FLAG', flag: true });
+                dispatch({ type: 'SET_UPLOAD_FLAG', busy: true });
                 return;
             }
             if (status === 'removed') {
-                dispatch({ type: 'SET_UPLOAD_FLAG', flag: fileList.some(file => file.status === 'uploading') });
+                dispatch({ type: 'SET_UPLOAD_FLAG', busy: fileList.some(file => file.status === 'uploading') });
                 return;
             }
             if (response !== undefined && (status === 'success' || status === 'done')) {
                 dispatch({
                     type: 'ADD_LABELLED_PDF',
                     file: { response, name, uid, status, size },
-                    flag: fileList.some(file => file.status === 'uploading')
+                    busy: fileList.some(file => file.status === 'uploading')
                 })
                 return;
             }
             if (status === 'error')
-                dispatch({ type: 'SET_UPLOAD_FLAG', flag: false })
+                dispatch({ type: 'SET_UPLOAD_FLAG', busy: false })
             else
                 return;
             const err: unknown = file.error;
