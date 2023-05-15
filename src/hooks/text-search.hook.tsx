@@ -25,9 +25,15 @@ function useTextSearch<T>() {
     setSearchText((search) => ({ ...search, [dataIndex]: selectedKeys[0] }));
   };
 
-  const handleReset = (clearFilters: () => void) => {
-    clearFilters();
-    setSearchText({});
+  /**
+   * 
+   * IMPORTANT: return  undefined here instead of an empty array, if you use an empty array,
+   * this crashes, it attempts to access the array and a mismatch will happen causing an error,
+   * using undefined makes it skip using this  
+   * @param dataIndex 
+   */
+  const handleReset = (dataIndex: DataIndex) => {
+    setSearchText((search) => ({ ...search, [dataIndex]: undefined }));
   };
 
   /**
@@ -40,7 +46,7 @@ function useTextSearch<T>() {
   const getColumnSearchProps = (
     dataIndex: DataIndex,
     ref: React.RefObject<InputRef>,
-    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => ReturnType<RenderFuntion> = e => e
+    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => React.ReactNode = e => e
   ): ColumnType<T> => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -75,7 +81,7 @@ function useTextSearch<T>() {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleReset(dataIndex)}
             size="small"
             style={{ width: 90 }}
           >

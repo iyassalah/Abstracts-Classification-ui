@@ -14,10 +14,12 @@ interface IProps {
 }
 
 type State = { abstracts: IAbstract[], authors: Set<string>, labels: Set<string> };
+export type ResultsFilters = Record<"labels" | "author", FilterValue | null>;
+
 const ResultsTable = (props: IProps) => {
     const defaulted = props?.data?.length ? props.data : mock.abstracts;
     const [modal, contextHolder] = Modal.useModal();
-    const [filters, setFilters] = useState<Record<"labels" | "author", FilterValue | null>>({ author: [], labels: [] });
+    const [filters, setFilters] = useState<ResultsFilters>({ author: [], labels: [] });
     const [data, setData] = useState<State>({ abstracts: defaulted, authors: new Set(), labels: new Set() });
     useEffect(() => {
         setData({
@@ -53,7 +55,7 @@ const ResultsTable = (props: IProps) => {
     };
 
     const handleChange: TableProps<IAbstract>['onChange'] = (pagination, filters) => {
-        setFilters(filters);
+        setFilters({ author: filters?.author, labels: filters?.labels });
     };
 
     const columns: ColumnsType<IAbstract> = [
