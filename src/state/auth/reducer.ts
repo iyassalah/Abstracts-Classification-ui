@@ -9,7 +9,6 @@ export function decodeToken(token: string, login = false): AuthState {
   } catch (error) {
     return { status: AuthStatus.LOGGED_OUT }
   }
-  console.log(decoded);
   if (
     !decoded ||
     typeof decoded !== "object" ||
@@ -21,7 +20,6 @@ export function decodeToken(token: string, login = false): AuthState {
     throw Error("Invalid token");
   }
   const currTimeInSeconds = (new Date().getTime() / 1000);
-  console.log(decoded, currTimeInSeconds, decoded.exp < currTimeInSeconds);
   if (decoded.exp < currTimeInSeconds) {
     return { status: AuthStatus.LOGGED_OUT, expired: true, attempted: login };
   }

@@ -19,7 +19,6 @@ const Interactive = () => {
       });
 
       const data = response.data;
-      console.log(data.categories);
 
       // Update tagList state with response data
       setTagList(data.categories);

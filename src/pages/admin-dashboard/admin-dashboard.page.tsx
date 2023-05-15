@@ -43,11 +43,9 @@ function AdminDashboard() {
           },
         }
       )
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
         message.success('User created successfully');
         form.resetFields();
-
       })
       .catch((error) => {
         console.error(error);

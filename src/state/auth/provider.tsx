@@ -43,7 +43,6 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     return state.status === AuthStatus.LOGGED_IN;
   };
 
-  console.log(state);
   const initialState: AuthContextProps = { state, login, logout, isTokenExpired }
 
   return (

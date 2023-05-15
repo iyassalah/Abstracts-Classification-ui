@@ -22,10 +22,8 @@ export type AuthState = ILoggedIn | ILoggedOut;
 
 export function getInitialState(): AuthState {
     const token = localStorage.getItem('token');
-    console.log(token);
     if (token === null)
         return { status: AuthStatus.LOGGED_OUT }
-    console.log('here')
     return {
         ...decodeToken(token)
     }
