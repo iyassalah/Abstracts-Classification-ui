@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, message, Table } from "antd";
 import axios from "axios";
-import { AuthContext } from "../../state/reducer";
 import { IGetCLasses } from '../../types/responses';
 import "./class-management.scss";
 
@@ -10,15 +9,18 @@ interface IClass {
   displayedName: string;
 }
 
-function ClassManagement() {
+interface IProps {
+  token: string;
+}
+
+function ClassManagement(props: IProps) {
   const [classes, setClasses] = useState<IClass[]>([]);
   const [loading, setLoading] = useState(false);
-  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     setLoading(true);
     axios.get<IGetCLasses>("/classes")
-    .then((response) => {
+      .then((response) => {
         console.log(response.data.classes)
         setClasses(response.data.classes);
       })
@@ -64,7 +66,7 @@ function ClassManagement() {
         <Input
           defaultValue={text}
           onBlur={(e) =>
-            handleUpdateDisplayedName(record.internalName, e.target.value, token)
+            handleUpdateDisplayedName(record.internalName, e.target.value, props.token)
           }
         />
       ),

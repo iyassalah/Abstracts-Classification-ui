@@ -15,6 +15,7 @@ export type AuthContextProps = {
   state: AuthState;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const AuthContext = createContext<AuthContextProps>(null as any);
 
 const AuthProvider = ({ children }: IAuthProviderProps) => {
