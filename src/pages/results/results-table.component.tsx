@@ -30,7 +30,7 @@ const ResultsTable = (props: IProps) => {
             authors: new Set(defaulted.map(e => e.author)),
         }); // TODO: fetch from API
     }, []);
-    const textSearch = useTextSearch<IAbstract>(props?.filters?.search);
+    const textSearch = useTextSearch<IAbstract>(props?.filters?.search, search => props.onFilter({ search }));
 
     const titleSearchProps = useColumnProps(textSearch, 'title');
     const abstractSearchProps = useColumnProps(textSearch, 'abstract', (element, [text, record]) => (

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
 import { Button, Input, Space } from "antd";
@@ -15,6 +15,11 @@ function useTextSearch<T>(intitialSearchText?: SearchedText<T>, onChange?: (even
   type RenderFuntion = Exclude<ColumnType<T>['render'], undefined>;
 
   const [searchText, setSearchText] = useState<SearchedText<T>>(intitialSearchText ?? {});
+  useEffect(() => {
+    if (onChange && intitialSearchText)
+      setSearchText(intitialSearchText);
+  }, [intitialSearchText])
+
 
   const handleChange = (dataIndex: DataIndex, val?: string) => {
     const action: SearchedText<T> = {};
