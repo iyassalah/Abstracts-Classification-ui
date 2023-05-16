@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { Input, Table } from "antd";
+import { RedoOutlined } from '@ant-design/icons';
+import { Button, Input, Table } from "antd";
+import useMessage from "antd/es/message/useMessage";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import useTextSearch, { useColumnProps } from "../../hooks/text-search.hook";
 import { IGetCLasses } from '../../types/responses';
 import "./class-management.scss";
-import useTextSearch from "../../hooks/text-search.hook";
-import { useColumnProps } from "../../hooks/text-search.hook";
-import useMessage from "antd/es/message/useMessage";
 
 interface IClass {
   internalName: string;
@@ -24,7 +24,7 @@ function ClassManagement(props: IProps) {
   const internalNameProps = useColumnProps(search, 'internalName');
   const [msgAPI, messageContext] = useMessage();
 
-  useEffect(() => {
+  const updateClasses = () => {
     setLoading(true);
     axios.get<IGetCLasses>("/classes")
       .then((response) => {
@@ -35,6 +35,10 @@ function ClassManagement(props: IProps) {
         msgAPI.error('Could not retrieve classes');
       })
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    updateClasses();
   }, []);
 
   const handleUpdateDisplayedName = (
@@ -100,6 +104,12 @@ function ClassManagement(props: IProps) {
       {messageContext}
       <h1>Classes Management</h1>
       <hr />
+      <Button
+        className='reload-btn'
+        type="dashed"
+        onClick={loading ? undefined : updateClasses}
+        icon={<RedoOutlined />}
+      >Reload</Button>
       <div className="class-management-body">
         <Table
           dataSource={classes.map((label, i) => ({ ...label, key: i }))}
