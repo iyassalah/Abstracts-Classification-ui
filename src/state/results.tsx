@@ -11,6 +11,7 @@ export type ResultsState = {
     fileList: UploadedPDF[];
     busy: boolean;
     resultsPage: { filters?: ResultsFilters, search?: SearchedText<IAbstract> },
+    classMapping?: Record<string, string>;
 };
 
 interface IAddPayload {
@@ -30,6 +31,12 @@ interface ISetUploadFlag {
     busy: boolean;
 }
 
+interface ISetClassMappings {
+    type: 'SET_CLASS_MAPPINGS';
+    unset?: boolean;
+    classes: Record<string, string>;
+}
+
 interface IUpdateFilters {
     type: 'SET_UPDATE_FILTERS';
     filters: NonNullable<ResultsState['resultsPage']>;
@@ -39,6 +46,7 @@ export type Action =
     | IAddPayload
     | IRemovePayload
     | ISetUploadFlag
+    | ISetClassMappings
     | IUpdateFilters;
 
 export const initialState: ResultsState = {
@@ -58,6 +66,8 @@ export const reducer = (state: ResultsState, action: Action): ResultsState => {
             return { ...state, busy }
         case 'SET_UPDATE_FILTERS':
             return { ...state, resultsPage: { ...state.resultsPage, ...action.filters } }
+        case 'SET_CLASS_MAPPINGS':
+            return { ...state, classMapping: { ...(action.unset ? {} : state.classMapping), ...action.classes } }
     }
 };
 

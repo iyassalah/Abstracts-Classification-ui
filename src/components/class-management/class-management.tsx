@@ -2,12 +2,12 @@ import { RedoOutlined } from '@ant-design/icons';
 import { Button, Input, Table } from "antd";
 import useMessage from "antd/es/message/useMessage";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useClasses } from '../../api/classes';
 import useTextSearch, { useColumnProps } from "../../hooks/text-search.hook";
-import { IGetCLasses } from '../../types/responses';
 import "./class-management.scss";
 
-interface IClass {
+export interface IClass {
   internalName: string;
   displayedName: string;
 }
@@ -17,35 +17,18 @@ interface IProps {
 }
 
 function ClassManagement(props: IProps) {
-  const [classes, setClasses] = useState<IClass[]>([]);
-  const [loading, setLoading] = useState(false);
   const [Error, setError] = useState<string[]>([])
   const search = useTextSearch<IClass>();
   const internalNameProps = useColumnProps(search, 'internalName');
   const [msgAPI, messageContext] = useMessage();
 
-  const updateClasses = () => {
-    setLoading(true);
-    axios.get<IGetCLasses>("/classes")
-      .then((response) => {
-        setClasses(response.data.classes);
-      })
-      .catch(err => {
-        console.error(err);
-        msgAPI.error('Could not retrieve classes');
-      })
-      .finally(() => setLoading(false));
-  }
-
-  useEffect(() => {
-    updateClasses();
-  }, []);
+  const { setLoading, updateClasses, classes, setClasses, Loading } = useClasses();
 
   const handleUpdateDisplayedName = (
     internalName: string,
     displayedName: string,
   ) => {
-    if (classes.some(label => label.displayedName === displayedName && label.internalName === internalName))
+    if (classes?.[internalName] === displayedName)
       return;
     setLoading(true);
     axios
@@ -68,9 +51,7 @@ function ClassManagement(props: IProps) {
       })
       .finally(() => {
         setLoading(false);
-        setClasses(state => state.map(
-          (label) => label.internalName === internalName ? { ...label, displayedName: displayedName } : label)
-        );
+        setClasses({ [internalName]: displayedName });
       });
   };
   const displayedNameProps = useColumnProps(search, 'displayedName', (node, [text, record]) => (
@@ -107,14 +88,14 @@ function ClassManagement(props: IProps) {
       <Button
         className='reload-btn'
         type="dashed"
-        onClick={loading ? undefined : updateClasses}
+        onClick={Loading ? undefined : updateClasses}
         icon={<RedoOutlined />}
       >Reload</Button>
       <div className="class-management-body">
         <Table
-          dataSource={classes.map((label, i) => ({ ...label, key: i }))}
+          dataSource={Object.entries(classes).map((label, i) => ({ internalName: label[0], displayedName: label[1], key: i }))}
           columns={columns}
-          loading={loading}
+          loading={Loading}
           pagination={false}
         />
       </div>
