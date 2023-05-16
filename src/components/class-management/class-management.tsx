@@ -19,6 +19,7 @@ interface IProps {
 function ClassManagement(props: IProps) {
   const [classes, setClasses] = useState<IClass[]>([]);
   const [loading, setLoading] = useState(false);
+  const [Error, setError] = useState<string[]>([])
   const search = useTextSearch<IClass>();
   const internalNameProps = useColumnProps(search, 'internalName');
   const [msgAPI, messageContext] = useMessage();
@@ -28,6 +29,10 @@ function ClassManagement(props: IProps) {
     axios.get<IGetCLasses>("/classes")
       .then((response) => {
         setClasses(response.data.classes);
+      })
+      .catch(err => {
+        console.error(err);
+        msgAPI.error('Could not retrieve classes');
       })
       .finally(() => setLoading(false));
   }, []);
@@ -50,12 +55,19 @@ function ClassManagement(props: IProps) {
       })
       .then(() => {
         msgAPI.success("Displayed name updated successfully");
+        setError(state => state.filter(label => label !== internalName));
       })
       .catch((error) => {
         console.error(error);
+        setError(state => [...state, internalName]);
         msgAPI.error("Displayed name update failed");
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setClasses(state => state.map(
+          (label) => label.internalName === internalName ? { ...label, displayedName: displayedName } : label)
+        );
+      });
   };
   const displayedNameProps = useColumnProps(search, 'displayedName', (node, [text, record]) => (
     <Input
@@ -63,6 +75,8 @@ function ClassManagement(props: IProps) {
       onBlur={(e) =>
         handleUpdateDisplayedName(record.internalName, e.target.value)
       }
+      onPressEnter={(e) => handleUpdateDisplayedName(record.internalName, e.currentTarget.value)}
+      status={Error.includes(record.internalName) ? 'error' : undefined}
     />
   ),);
 
