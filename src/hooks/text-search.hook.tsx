@@ -6,15 +6,25 @@ import type { ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
-export type SearchedText<T> = Partial<Record<keyof T, string>>;
+export type SearchedText<T> = Partial<Record<keyof T, string | undefined>>;
 /**
  * Returns a function that returns the props to be passed to a column to give it text search
  */
-function useTextSearch<T>(intitialSearchText?: SearchedText<T>) {
+function useTextSearch<T>(intitialSearchText?: SearchedText<T>, onChange?: (event: SearchedText<T>) => void) {
   type DataIndex = keyof T;
   type RenderFuntion = Exclude<ColumnType<T>['render'], undefined>;
 
   const [searchText, setSearchText] = useState<SearchedText<T>>(intitialSearchText ?? {});
+
+  const handleChange = (dataIndex: DataIndex, val?: string) => {
+    const action: SearchedText<T> = {};
+    action[dataIndex] = val;
+    if (onChange) {
+      onChange(action);
+    } else {
+      setSearchText((search) => ({ ...search, ...action }));
+    }
+  }
 
   const handleSearch = (
     selectedKeys: string[],
@@ -22,8 +32,9 @@ function useTextSearch<T>(intitialSearchText?: SearchedText<T>) {
     dataIndex: DataIndex
   ) => {
     confirm();
-    setSearchText((search) => ({ ...search, [dataIndex]: selectedKeys[0] }));
+    handleChange(dataIndex, selectedKeys[0]);
   };
+
 
   /**
    * 
@@ -33,7 +44,7 @@ function useTextSearch<T>(intitialSearchText?: SearchedText<T>) {
    * @param dataIndex 
    */
   const handleReset = (dataIndex: DataIndex) => {
-    setSearchText((search) => ({ ...search, [dataIndex]: undefined }));
+    handleChange(dataIndex, undefined);
   };
 
   /**
@@ -92,10 +103,7 @@ function useTextSearch<T>(intitialSearchText?: SearchedText<T>) {
             size="small"
             onClick={() => {
               confirm({ closeDropdown: false });
-              setSearchText((search) => ({
-                ...search,
-                [dataIndex]: (selectedKeys as string[])[0],
-              }));
+              handleChange(dataIndex, (selectedKeys as string[])[0]);
             }}
           >
             Filter
