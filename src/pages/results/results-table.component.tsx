@@ -1,4 +1,4 @@
-import { Modal, Table, Tag } from "antd";
+import { Modal, Table, Tag, Typography } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { FilterValue } from 'antd/es/table/interface';
 import { useEffect, useState } from 'react';
@@ -34,17 +34,19 @@ const ResultsTable = (props: IProps) => {
 
     const titleSearchProps = useColumnProps(textSearch, 'title');
     const abstractSearchProps = useColumnProps(textSearch, 'abstract', (element, [text, record]) => (
-        <a
-            className="abstract"
-            onClick={() =>
-                modal.info({
-                    title: record?.title ?? 'title',
-                    content: <p>{text}</p>,
-                    centered: true,
-                    maskClosable: true,
-                })}>
-            {element}
-        </a>
+        <Typography.Paragraph ellipsis={{ rows: 3 }}>
+            <a
+                className="abstract"
+                onClick={() =>
+                    modal.info({
+                        title: record?.title ?? <span style={{ fontStyle: 'italic' }}>Abstract</span>,
+                        content: <p>{text}</p>,
+                        centered: true,
+                        maskClosable: true,
+                    })}>
+                {element}
+            </a>
+        </Typography.Paragraph>
     ));
 
     const filterSet = new Set(filters.labels);
@@ -79,7 +81,6 @@ const ResultsTable = (props: IProps) => {
         {
             title: 'Abstract',
             dataIndex: 'abstract',
-            ellipsis: true,
             ...abstractSearchProps
         },
         {
