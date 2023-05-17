@@ -1,11 +1,11 @@
 import { RedoOutlined } from '@ant-design/icons';
 import { Button, Input, Table } from "antd";
-import useMessage from "antd/es/message/useMessage";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useClasses } from '../../api/classes';
 import useTextSearch, { useColumnProps } from "../../hooks/text-search.hook";
 import "./class-management.scss";
+import { MessageContext } from '../../state/message';
 
 export interface IClass {
   internalName: string;
@@ -20,7 +20,7 @@ function ClassManagement(props: IProps) {
   const [Error, setError] = useState<string[]>([])
   const search = useTextSearch<IClass>();
   const internalNameProps = useColumnProps(search, 'internalName');
-  const [msgAPI, messageContext] = useMessage();
+  const { msgAPI } = useContext(MessageContext)
 
   const { setLoading, updateClasses, classes, setClasses, Loading } = useClasses();
 
@@ -80,16 +80,22 @@ function ClassManagement(props: IProps) {
     },
   ];
 
+  const onUpdate = () => {
+    if (!Loading) {
+      updateClasses('Could not update classes', 'Updated classes successfully');
+    }
+  }
+
   return (
     <div className="class-management">
-      {messageContext}
       <h1>Classes Management</h1>
       <hr />
       <Button
         className='reload-btn'
         type="dashed"
-        onClick={Loading ? undefined : updateClasses}
+        onClick={onUpdate}
         icon={<RedoOutlined />}
+        disabled={Loading}
       >Reload</Button>
       <div className="class-management-body">
         <Table
