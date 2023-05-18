@@ -15,7 +15,7 @@ export type ResultsState = {
 };
 
 interface IAddPayload {
-    type: 'ADD_LABELLED_PDF';
+    type: 'SET_LABELLED_PDF';
     file: UploadedPDF;
     busy?: boolean;
 }
@@ -58,8 +58,17 @@ export const initialState: ResultsState = {
 export const reducer = (state: ResultsState, action: Action): ResultsState => {
     const busy = !('busy' in action) || action?.busy === undefined ? state.busy : action.busy;
     switch (action.type) {
-        case 'ADD_LABELLED_PDF':
-            return { ...state, busy, fileList: [...state.fileList, action.file] }
+        case 'SET_LABELLED_PDF': {
+            const { fileList } = state;
+            const index = fileList.findIndex(file => action.file.uid === file.uid);
+            if (index === -1)
+                return { ...state, busy, fileList: [...fileList, action.file] }
+            return {
+                ...state,
+                busy,
+                fileList: fileList.map((file, i) => i === index ? file : action.file)
+            }
+        }
         case 'REMOVE_LABELLED_PDF':
             return { ...state, busy, fileList: state.fileList.filter(e => e.uid !== action.uid) };
         case 'SET_UPLOAD_FLAG':
