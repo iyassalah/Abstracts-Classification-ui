@@ -19,33 +19,37 @@ const MultiUpload: React.FC = () => {
         defaultFileList: fileList,
         onChange({ file, fileList }) {
             const { response, name, uid, status, size, percent } = file;
-            if (status === 'uploading' && percent && percent === 100 && response) {
-                const filteredFile = { name, uid, status, size, percent, response };
-                dispatch({ type: 'SET_LABELLED_PDF', busy: true, file: filteredFile });
-                return;
-            } else if (status === 'uploading') {
-                dispatch({ type: 'SET_UPLOAD_FLAG', busy: true });
-                return;
-            }
-            if (status === 'removed') {
-                dispatch({ type: 'SET_UPLOAD_FLAG', busy: fileList.some(file => file.status === 'uploading') });
-                return;
-            }
-            if (response !== undefined && (status === 'success' || status === 'done')) {
-                dispatch({
-                    type: 'SET_LABELLED_PDF',
-                    file: { response, name, uid, status, size },
-                    busy: fileList.some(file => file.status === 'uploading')
-                })
-                return;
-            }
-            if (status === 'error')
-                dispatch({ type: 'SET_UPLOAD_FLAG', busy: false })
-            else
-                return;
             const err: unknown = file.error;
-            if (err && typeof err === 'object' && 'status' in err && err.status === 400)
-                msgAPI.error("Could not extract abstract from PDF file.");
+            switch (status) {
+                case undefined:
+                    if (err && typeof err === 'object' && 'status' in err && err.status === 400)
+                        msgAPI.error("Could not extract abstract from PDF file.");
+                    return;
+                case 'done':
+                case 'success':
+                    if (!response)
+                        return;
+                    dispatch({
+                        type: 'SET_LABELLED_PDF',
+                        file: { response, name, uid, status, size },
+                        busy: fileList.some(file => file.status === 'uploading')
+                    })
+                    return;
+                case 'error':
+                    dispatch({ type: 'SET_UPLOAD_FLAG', busy: false })
+                    return;
+                case 'removed':
+                    dispatch({ type: 'SET_UPLOAD_FLAG', busy: fileList.some(file => file.status === 'uploading') });
+                    return;
+                case 'uploading':
+                    if (percent && percent === 100 && response) {
+                        const filteredFile = { name, uid, status, size, percent, response };
+                        dispatch({ type: 'SET_LABELLED_PDF', busy: true, file: filteredFile });
+                        return;
+                    }
+                    dispatch({ type: 'SET_UPLOAD_FLAG', busy: true });
+                    return;
+            }
         },
         onRemove({ uid }) {
             dispatch({

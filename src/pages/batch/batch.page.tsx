@@ -42,7 +42,6 @@ const Batch = () => {
       title: 'Size',
       dataIndex: 'size',
       key: 'size',
-      defaultSortOrder: 'descend',
       sorter: (a, b) => (a?.size ?? -Infinity) - (b?.size ?? -Infinity),
       render: (text, record) => {
         const size = record?.size === undefined ? 'Unknown' : `${(record.size / 1024).toFixed(2)}KB`;
