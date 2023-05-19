@@ -13,4 +13,10 @@ body {
       height: 100%;
     }
   }
+
+  .app {
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 0px 64px 0px 64px;
+  }
 }
