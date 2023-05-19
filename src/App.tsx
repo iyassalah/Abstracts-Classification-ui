@@ -16,8 +16,8 @@ function App() {
   return (
     <ConfigProvider {...themeProps}>
       <MessageProvider>
-        <div className={`app-wrapper${darkTheme ? ' dark' : ''}`}>
-          <Layout>
+        {/* <div className={`app-wrapper${darkTheme ? ' dark' : ''}`}> */}
+          <Layout className="layout">
             <Layout.Header className="layout-header" style={{ backgroundColor: token.colorBgContainer }}>
               <Navbar toggle={toggle} darkTheme={darkTheme} />
             </Layout.Header>
@@ -33,7 +33,7 @@ function App() {
               </Routes>
             </Layout.Content>
           </Layout>
-        </div>
+        {/* </div> */}
       </MessageProvider>
     </ConfigProvider>
   );

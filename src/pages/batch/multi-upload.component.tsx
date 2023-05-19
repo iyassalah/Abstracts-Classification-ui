@@ -21,6 +21,7 @@ const MultiUpload = ({ children }: IProps) => {
         name: 'file',
         multiple: true,
         defaultFileList: fileList,
+        accept: '.pdf',
         onChange({ file, fileList }) {
             const { response, name, uid, status, size, percent } = file;
             const err: unknown = file.error;
