@@ -1,54 +1,86 @@
 import React, { createContext, useReducer } from 'react';
 import { LabelledPDF } from '../types/responses';
 import { UploadFile } from 'antd';
+import { ResultsFilters } from '../pages/results/results-table.component';
+import { SearchedText } from '../hooks/text-search.hook';
+import { IAbstract } from '../types/shared';
 
 export type UploadedPDF = UploadFile<LabelledPDF> & { response: NonNullable<UploadFile<LabelledPDF>['response']> };
 
-export type State = {
+export type ResultsState = {
     fileList: UploadedPDF[];
     busy: boolean;
+    resultsPage: { filters?: ResultsFilters, search?: SearchedText<IAbstract> },
+    classMapping?: Record<string, string>;
 };
 
 interface IAddPayload {
-    type: 'ADD_LABELLED_PDF';
+    type: 'SET_LABELLED_PDF';
     file: UploadedPDF;
-    flag?: boolean;
+    busy?: boolean;
 }
 
 interface IRemovePayload {
     type: 'REMOVE_LABELLED_PDF';
     uid: string;
-    flag?: boolean;
+    busy?: boolean;
 }
 
 interface ISetUploadFlag {
     type: 'SET_UPLOAD_FLAG';
-    flag: boolean;
+    busy: boolean;
+}
+
+interface ISetClassMappings {
+    type: 'SET_CLASS_MAPPINGS';
+    unset?: boolean;
+    classes: Record<string, string>;
+}
+
+interface IUpdateFilters {
+    type: 'SET_UPDATE_FILTERS';
+    filters: NonNullable<ResultsState['resultsPage']>;
 }
 
 export type Action =
     | IAddPayload
     | IRemovePayload
-    | ISetUploadFlag;
+    | ISetUploadFlag
+    | ISetClassMappings
+    | IUpdateFilters;
 
-export const initialState: State = {
+export const initialState: ResultsState = {
     fileList: [],
     busy: false,
+    resultsPage: {},
 };
 
-export const reducer = (state: State, action: Action): State => {
-    const busy = action?.flag === undefined ? state.busy : action.flag;
+export const reducer = (state: ResultsState, action: Action): ResultsState => {
+    const busy = !('busy' in action) || action?.busy === undefined ? state.busy : action.busy;
     switch (action.type) {
-        case 'ADD_LABELLED_PDF':
-            return { ...state, busy, fileList: [...state.fileList, action.file] }
+        case 'SET_LABELLED_PDF': {
+            const { fileList } = state;
+            const index = fileList.findIndex(file => action.file.uid === file.uid);
+            if (index === -1)
+                return { ...state, busy, fileList: [...fileList, action.file] }
+            return {
+                ...state,
+                busy,
+                fileList: fileList.map((file, i) => i === index ? file : action.file)
+            }
+        }
         case 'REMOVE_LABELLED_PDF':
             return { ...state, busy, fileList: state.fileList.filter(e => e.uid !== action.uid) };
         case 'SET_UPLOAD_FLAG':
             return { ...state, busy }
+        case 'SET_UPDATE_FILTERS':
+            return { ...state, resultsPage: { ...state.resultsPage, ...action.filters } }
+        case 'SET_CLASS_MAPPINGS':
+            return { ...state, classMapping: { ...(action.unset ? {} : state.classMapping), ...action.classes } }
     }
 };
 
-export const ResultsContext = createContext<{ state: State; dispatch: React.Dispatch<Action> }>({
+export const ResultsContext = createContext<{ state: ResultsState; dispatch: React.Dispatch<Action> }>({
     state: initialState,
     dispatch: () => null,
 });

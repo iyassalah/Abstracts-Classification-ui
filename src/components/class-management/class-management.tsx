@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { Input, message, Table } from "antd";
+import { RedoOutlined } from '@ant-design/icons';
+import { Button, Input, Table } from "antd";
 import axios from "axios";
-import { IGetCLasses } from '../../types/responses';
+import { useContext, useState } from "react";
+import { useClasses } from '../../api/classes';
+import useTextSearch, { useColumnProps } from "../../hooks/text-search.hook";
 import "./class-management.scss";
-import useTextSearch from "../../hooks/text-search.hook";
-import { useColumnProps } from "../../hooks/text-search.hook";
+import { MessageContext } from '../../state/message';
 
-interface IClass {
+export interface IClass {
   internalName: string;
   displayedName: string;
 }
@@ -16,25 +17,18 @@ interface IProps {
 }
 
 function ClassManagement(props: IProps) {
-  const [classes, setClasses] = useState<IClass[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [Error, setError] = useState<string[]>([])
   const search = useTextSearch<IClass>();
   const internalNameProps = useColumnProps(search, 'internalName');
+  const { msgAPI } = useContext(MessageContext)
 
-  useEffect(() => {
-    setLoading(true);
-    axios.get<IGetCLasses>("/classes")
-      .then((response) => {
-        setClasses(response.data.classes);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+  const { setLoading, updateClasses, classes, setClasses, Loading } = useClasses();
 
   const handleUpdateDisplayedName = (
     internalName: string,
     displayedName: string,
   ) => {
-    if (classes.some(label => label.displayedName === displayedName && label.internalName === internalName))
+    if (classes?.[internalName] === displayedName)
       return;
     setLoading(true);
     axios
@@ -47,13 +41,18 @@ function ClassManagement(props: IProps) {
         },
       })
       .then(() => {
-        message.success("Displayed name updated successfully");
+        msgAPI.success("Displayed name updated successfully");
+        setError(state => state.filter(label => label !== internalName));
       })
       .catch((error) => {
         console.error(error);
-        message.error("Displayed name update failed");
+        setError(state => [...state, internalName]);
+        msgAPI.error("Displayed name update failed");
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setClasses({ [internalName]: displayedName });
+      });
   };
   const displayedNameProps = useColumnProps(search, 'displayedName', (node, [text, record]) => (
     <Input
@@ -61,6 +60,8 @@ function ClassManagement(props: IProps) {
       onBlur={(e) =>
         handleUpdateDisplayedName(record.internalName, e.target.value)
       }
+      onPressEnter={(e) => handleUpdateDisplayedName(record.internalName, e.currentTarget.value)}
+      status={Error.includes(record.internalName) ? 'error' : undefined}
     />
   ),);
 
@@ -79,15 +80,28 @@ function ClassManagement(props: IProps) {
     },
   ];
 
+  const onUpdate = () => {
+    if (!Loading) {
+      updateClasses('Could not update classes', 'Updated classes successfully');
+    }
+  }
+
   return (
     <div className="class-management">
       <h1>Classes Management</h1>
       <hr />
+      <Button
+        className='reload-btn'
+        type="dashed"
+        onClick={onUpdate}
+        icon={<RedoOutlined />}
+        disabled={Loading}
+      >Reload</Button>
       <div className="class-management-body">
         <Table
-          dataSource={classes}
+          dataSource={Object.entries(classes).map((label, i) => ({ internalName: label[0], displayedName: label[1], key: i }))}
           columns={columns}
-          loading={loading}
+          loading={Loading}
           pagination={false}
         />
       </div>

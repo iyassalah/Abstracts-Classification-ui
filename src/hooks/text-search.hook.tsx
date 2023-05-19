@@ -1,20 +1,35 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef } from "antd";
 import { Button, Input, Space } from "antd";
 import type { ColumnType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
+
+export type SearchedText<T> = Partial<Record<keyof T, string | undefined>>;
 /**
  * Returns a function that returns the props to be passed to a column to give it text search
  */
-function useTextSearch<T>() {
+function useTextSearch<T>(intitialSearchText?: SearchedText<T>, onChange?: (event: SearchedText<T>) => void) {
   type DataIndex = keyof T;
   type RenderFuntion = Exclude<ColumnType<T>['render'], undefined>;
 
-  const [searchText, setSearchText] = useState<
-    Partial<Record<DataIndex, string>>
-  >({});
+  const [searchText, setSearchText] = useState<SearchedText<T>>(intitialSearchText ?? {});
+  useEffect(() => {
+    if (onChange && intitialSearchText)
+      setSearchText(intitialSearchText);
+  }, [intitialSearchText])
+
+
+  const handleChange = (dataIndex: DataIndex, val?: string) => {
+    const action: SearchedText<T> = {};
+    action[dataIndex] = val;
+    if (onChange) {
+      onChange(action);
+    } else {
+      setSearchText((search) => ({ ...search, ...action }));
+    }
+  }
 
   const handleSearch = (
     selectedKeys: string[],
@@ -22,12 +37,19 @@ function useTextSearch<T>() {
     dataIndex: DataIndex
   ) => {
     confirm();
-    setSearchText((search) => ({ ...search, [dataIndex]: selectedKeys[0] }));
+    handleChange(dataIndex, selectedKeys[0]);
   };
 
-  const handleReset = (clearFilters: () => void) => {
-    clearFilters();
-    setSearchText({});
+
+  /**
+   * 
+   * IMPORTANT: return  undefined here instead of an empty array, if you use an empty array,
+   * this crashes, it attempts to access the array and a mismatch will happen causing an error,
+   * using undefined makes it skip using this  
+   * @param dataIndex 
+   */
+  const handleReset = (dataIndex: DataIndex) => {
+    handleChange(dataIndex, undefined);
   };
 
   /**
@@ -40,7 +62,7 @@ function useTextSearch<T>() {
   const getColumnSearchProps = (
     dataIndex: DataIndex,
     ref: React.RefObject<InputRef>,
-    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => ReturnType<RenderFuntion> = e => e
+    renderCallback: (node: React.ReactNode, renderParams: Parameters<RenderFuntion>) => React.ReactNode = e => e
   ): ColumnType<T> => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -75,7 +97,7 @@ function useTextSearch<T>() {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleReset(dataIndex)}
             size="small"
             style={{ width: 90 }}
           >
@@ -86,10 +108,7 @@ function useTextSearch<T>() {
             size="small"
             onClick={() => {
               confirm({ closeDropdown: false });
-              setSearchText((search) => ({
-                ...search,
-                [dataIndex]: (selectedKeys as string[])[0],
-              }));
+              handleChange(dataIndex, (selectedKeys as string[])[0]);
             }}
           >
             Filter

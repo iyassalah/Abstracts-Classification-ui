@@ -9,6 +9,18 @@ import { ResultsContext, UploadedPDF } from "../../state/results";
 import "./batch.scss";
 import MultiUpload from "./multi-upload.component";
 
+const UploadStatus = ({ status, percent }: UploadedPDF) => {
+  if (status === 'done' || status === 'success')
+    return <span style={{ color: 'green' }}>Uploaded</span>;
+  if (percent === 100 && status === 'uploading')
+    return <span style={{ color: 'blue' }}>Processing</span>;
+  if (status === 'uploading')
+    return <span style={{ color: 'blue' }}>Uploading{percent ? `${percent}%` : ''}</span>;
+  if (status === 'error')
+    return <span style={{ color: 'red' }}>Error</span>
+  return <span></span>;
+}
+
 const Batch = () => {
   const { state: { busy, fileList } } = useContext(ResultsContext);
   const [filters, setFilters] = useState<Record<"status" | "name", FilterValue | null>>({ status: [], name: [] });
@@ -30,7 +42,6 @@ const Batch = () => {
       title: 'Size',
       dataIndex: 'size',
       key: 'size',
-      defaultSortOrder: 'descend',
       sorter: (a, b) => (a?.size ?? -Infinity) - (b?.size ?? -Infinity),
       render: (text, record) => {
         const size = record?.size === undefined ? 'Unknown' : `${(record.size / 1024).toFixed(2)}KB`;
@@ -46,13 +57,7 @@ const Batch = () => {
       filters: statuses.map(status => ({ text: status, value: status })),
       filteredValue: filters.status,
       onFilter: (value, { status }) => status === value,
-      render: (text, { status }) => (
-        <span>
-          {(status === 'done' || status === 'success') && <span style={{ color: 'green' }}>Uploaded</span>}
-          {status === 'uploading' && <span style={{ color: 'blue' }}>Uploading</span>}
-          {status === 'error' && <span style={{ color: 'red' }}>Error</span>}
-        </span>
-      ),
+      render: (text, file) => <UploadStatus {...file} />,
     },
   ];
   const disableBtn = busy || fileList.length === 0;
