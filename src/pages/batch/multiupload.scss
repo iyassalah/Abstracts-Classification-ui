@@ -1,7 +1,23 @@
 .multiupload-wrapper {
-    .dragger-children {
-        margin: 8px;
-        padding: 18px;
-        height: min-content;
+    
+    .dragger {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        cursor: all-scroll;
+
+        .dragger-children {
+            margin: 8px;
+            padding: 18px;
+            height: min-content;
+        }
+
+        .hint {
+            font-style: italic;
+            opacity: 0.8;
+            display: inline;
+            margin-right: 8px;
+        }
     }
 }

@@ -1,18 +1,22 @@
-import { InboxOutlined } from '@ant-design/icons';
-import { UploadProps } from 'antd';
+import { Button, UploadProps } from 'antd';
 import Dragger from 'antd/es/upload/Dragger';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import { MessageContext } from '../../state/message';
 import { ResultsContext } from '../../state/results';
 import { LabelledPDF } from '../../types/responses';
 import './multiupload.scss';
-import useMessage from 'antd/es/message/useMessage';
+import { UploadOutlined } from '@ant-design/icons';
 
+interface IProps {
+    children: JSX.Element;
+}
 
-const MultiUpload: React.FC = () => {
+const MultiUpload = ({ children }: IProps) => {
     const { dispatch, state: { fileList } } = useContext(ResultsContext);
-    const [msgAPI, messageContext] = useMessage();
+    const { msgAPI } = useContext(MessageContext);
 
     const props: UploadProps<LabelledPDF> = {
+        // openFileDialogOnClick: false,
         action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
         name: 'file',
         multiple: true,
@@ -60,9 +64,8 @@ const MultiUpload: React.FC = () => {
     };
     return (
         <div className='multiupload-wrapper'>
-            {messageContext}
             <Dragger {...props} className='dragger'>
-                <div className='dragger-children'>
+                {/* <div className='dragger-children'>
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                     </p>
@@ -70,7 +73,10 @@ const MultiUpload: React.FC = () => {
                     <p className="ant-upload-hint">
                         {fileList.length ? "Please don't leave the page while your files still being uploaded" : ''}
                     </p>
-                </div>
+                </div> */}
+                {children}
+                <p className='hint'>Drag a PDF file into this table to upload it, or click here to open a file picker</p>
+                <Button icon={<UploadOutlined />} />
             </Dragger>
         </div>
     )

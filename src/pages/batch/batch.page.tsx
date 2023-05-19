@@ -69,22 +69,23 @@ const Batch = () => {
     <div className="container">
       <div className="multi-upload-container">
         <div className="multi-upload">
-          <MultiUpload />
+          <MultiUpload>
+            <div className="file-list-container" onClick={e => e.stopPropagation()}>
+              <h2 className="text">Uploaded Files</h2>
+              <Table
+                onChange={handleChange}
+                columns={columns}
+                dataSource={fileList.map((file, i) => ({ ...file, key: i }))}
+                pagination={false}
+              />
+            </div>
+          </MultiUpload>
+          <div className="buttons">
+            <Button className="results-btn" type="primary" size="large" disabled={disableBtn} onClick={() => navigate('/results')}>
+              See Results
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className="file-list-container">
-        <h2 className="text">Uploaded Files</h2>
-        <Table
-          onChange={handleChange}
-          columns={columns}
-          dataSource={fileList.map((file, i) => ({ ...file, key: i }))}
-          pagination={false}
-        />
-      </div>
-      <div className="buttons">
-        <Button className="results-btn" type="primary" size="large" disabled={disableBtn} onClick={() => navigate('/results')}>
-          See Results
-        </Button>
       </div>
     </div>
   );
