@@ -1,25 +1,22 @@
+html {
+  height: 100%;
+}
+
 body {
-  margin: auto;
-}
+  margin: 0 !important;
+  height: 100%;
 
-.app {
-  width: 80%;
-  margin: auto;
-  min-height: 100vh;
-  height: auto;
-}
+  #root {
+    height: 100%;
 
-.layout {
-  width: 100%;
-  padding: 0 50px;
-  background-color: white;
-}
+    .layout {
+      height: 100%;
+    }
+  }
 
-.layout-header {
-  padding: 0 50px;
-  width: 100%;
-}
-
-.dark {
-  color: white;
+  .app {
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 0px 64px 0px 64px;
+  }
 }
