@@ -9,21 +9,29 @@ const Results = () => {
   const { state, dispatch } = useContext(ResultsContext);
   const { classes } = useClasses();
   const [Threshhold, setThreshhold] = useState(0.9);
+  console.log(Threshhold);
   const [ClassCount, setClassCount] = useState(3);
 
-  const data: IAbstract[] = useMemo(() => state.fileList
-    .map(file => ({
-      abstract: file.response.inferred_abstract,
-      author: 'Not available',
-      title: file.name,
+  const data: IAbstract[] = useMemo(() => {
+    return state.fileList
+      .map(file => ({
+        abstract: file.response.inferred_abstract,
+        author: 'Not available',
+        title: file.name,
 
-      labels: Object.entries(file.response.pred)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .filter(([name, prob]) => prob[0] > Threshhold)
-        .map(([internalName]) => classes[internalName])
-        .slice(0, ClassCount),
-    })
-    ), [state.fileList, Threshhold, ClassCount])
+        labels: Object.entries(file.response.pred)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .filter(([name, prob]) => prob > Threshhold)
+          .slice(0, ClassCount)
+          .map(([internalName]) => classes[internalName]),
+      }))
+  }, [state.fileList, Threshhold, ClassCount])
+
+  const updateThresh = (thresh: number) => {
+    if (thresh < 0 || thresh > 1 || isNaN(thresh))
+      return;
+    setThreshhold(thresh);
+  }
 
   return (
     <div className="container">
@@ -34,11 +42,13 @@ const Results = () => {
         </Typography.Text>
         <InputNumber
           name='thresh'
-          onBlur={e => setThreshhold(+e.target.value)}
-          onPressEnter={e => setThreshhold(+e.currentTarget.value)}
+          onBlur={e => updateThresh(+e.target.value)}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onPressEnter={e => updateThresh(+(e.target as any)?.value ?? NaN)}
           type='number'
           defaultValue={0.9}
           placeholder='0.9'
+          step={0.1}
           min={0}
           max={1}
         />
@@ -48,8 +58,12 @@ const Results = () => {
         <InputNumber
           name='count'
           onBlur={e => setClassCount(+e.target.value)}
-          onPressEnter={e => setClassCount(+e.currentTarget.value)}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onPressEnter={e => setClassCount(+(e.target as any)?.value ?? 0)}
           placeholder='5'
+          min={0}
+          max={Object.keys(state.classMapping ?? {}).length}
+          parser={value => parseInt(value ?? '3')}
           step={1}
         />
       </Space>

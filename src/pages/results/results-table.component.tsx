@@ -19,17 +19,17 @@ interface IProps {
 }
 
 const ResultsTable = (props: IProps) => {
-    const defaulted = props?.data?.length ? props.data : mock.abstracts;
+    const dataSource = props?.data?.length ? props.data : mock.abstracts;
     const [modal, contextHolder] = Modal.useModal();
     const [filters, setFilters] = useState<ResultsFilters>(props?.filters?.filters ?? { author: [], labels: [] });
-    const [data, setData] = useState<State>({ abstracts: defaulted, authors: new Set(), labels: new Set() });
+    const [data, setData] = useState<State>({ abstracts: dataSource, authors: new Set(), labels: new Set() });
     useEffect(() => {
         setData({
-            abstracts: defaulted,
-            labels: new Set(defaulted.map(e => e.labels).flat()),
-            authors: new Set(defaulted.map(e => e.author)),
+            abstracts: dataSource,
+            labels: new Set(dataSource.map(e => e.labels).flat()),
+            authors: new Set(dataSource.map(e => e.author)),
         }); // TODO: fetch from API
-    }, []);
+    }, [props.data]);
     const textSearch = useTextSearch<IAbstract>(props?.filters?.search, search => props.onFilter({ search }));
 
     const titleSearchProps = useColumnProps(textSearch, 'title');

@@ -9,7 +9,7 @@ export interface ILogin {
     access_token: string;
 }
 
-export type Probabilities = Record<string, [number, number]>;
+export type Probabilities = Record<string, number>;
 export interface LabelledPDF {
     pred: Probabilities;
     inferred_abstract: string;
