@@ -1,32 +1,41 @@
-import React, { useState } from "react";
-import "./interactive.scss";
-import { Button, Input, Tag } from "antd";
+import { Button, Input, Space, Tag, Typography } from "antd";
 import axios from "axios";
+import { useState } from "react";
+import { Probabilities } from "../../types/responses";
+import "./interactive.scss";
 
 
 const Interactive = () => {
   const [abstract, setAbstract] = useState("");
-  const [tagList, setTagList] = useState([]);
+  const [tagList, setTagList] = useState<Probabilities | null>(null);
 
   const handleClassify = async () => {
     try {
-      const response = await axios.post("/active", {
+      const response = await axios.post<Probabilities>("/active/proba", {
         abstract,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
-      const data = response.data;
-
-      // Update tagList state with response data
-      setTagList(data.categories);
+      const { data } = response;
+      setTagList(data);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const tags = Object
+    .entries(tagList ?? {})
+    .filter(label => label[1] > 0.7)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4).map(([label, prob]) => (
+      <Tag className="tag" key={label}>{`${label} (%${(prob * 100).toFixed(2)})`}</Tag>
+    ));
+
+  const predictions = (
+    <Space className="tags-column">
+      <Typography className="tags-label">Predicted Tags:</Typography>
+      {tags}
+    </Space>
+  )
 
   return (
     <>
@@ -47,12 +56,8 @@ const Interactive = () => {
           <Button size="large" className="" type="primary" onClick={handleClassify}>
             Classify
           </Button>
-          <div className="tags-column">
-            <div className="tags-label">Predicted Tags:</div>
-            {tagList.map((tag) => (
-              <Tag className="tag" key={tag}>{tag}</Tag>
-            ))}
-          </div>
+          {(tags.length === 0 && tagList !== null) && <Typography color="red">Could not identify any possible categories</Typography>}
+          {tags.length && predictions}
         </div>
       </div>
     </>
