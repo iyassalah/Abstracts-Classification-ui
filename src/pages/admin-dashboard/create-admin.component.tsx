@@ -1,9 +1,9 @@
-import { Button, Form, Input } from 'antd'
+import { Button, Divider, Form, Input } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import axios from 'axios';
-import React from 'react'
+import { useContext } from 'react';
+import { MessageContext } from '../../state/message';
 import { ICreateAdmin } from '../../types/responses';
-import useMessage from 'antd/es/message/useMessage';
 
 
 type FormValues = {
@@ -18,7 +18,7 @@ interface IProps {
 
 const CreateAdmin = (props: IProps) => {
     const [form] = useForm<FormValues>();
-    const [msgAPI, messageContext] = useMessage();
+    const { msgAPI } = useContext(MessageContext);
     const handleCreateUser = (values: FormValues) => {
         const { username, email, password } = values;
 
@@ -52,7 +52,8 @@ const CreateAdmin = (props: IProps) => {
     }
     return (
         <div className="admin-dashboard-create-user-form">
-            {messageContext}
+            <h1>Create Admin User</h1>
+            <Divider />
             <Form form={form} layout="vertical" onFinish={handleCreateUser}>
                 <Form.Item
                     name="email"

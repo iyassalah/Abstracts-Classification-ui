@@ -1,5 +1,5 @@
 import { RedoOutlined } from '@ant-design/icons';
-import { Button, Input, Table } from "antd";
+import { Button, Divider, Input, Table } from "antd";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { useClasses } from '../../api/classes';
@@ -89,7 +89,7 @@ function ClassManagement(props: IProps) {
   return (
     <div className="class-management">
       <h1>Classes Management</h1>
-      <hr />
+      <Divider />
       <Button
         className='reload-btn'
         type="dashed"

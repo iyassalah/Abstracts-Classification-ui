@@ -3,11 +3,13 @@ import './admin-dashboard.scss';
 import { Tabs, TabsProps } from 'antd';
 import { useContext } from 'react';
 
+import { DashboardOutlined, TagsOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import { Navigate } from 'react-router-dom';
 import ClassManagement from '../../components/class-management/class-management';
 import { AuthContext } from '../../state/auth/provider';
 import { AuthStatus } from '../../state/auth/state';
 import CreateAdmin from './create-admin.component';
+import StatisticsPage from './statistics.page';
 
 
 function AdminDashboard() {
@@ -18,18 +20,30 @@ function AdminDashboard() {
   const tabs: TabsProps['items'] = [
     {
       key: 'statistics',
-      children: <h1>Statistics</h1>,
-      label: 'Statistics'
+      children: <StatisticsPage />,
+      label: (
+        <span >
+          <DashboardOutlined />
+          Statistics
+        </span>)
     },
     {
       key: 'class-management',
       children: <ClassManagement token={state.token} />,
-      label: 'Class Management'
+      label: (
+        <span>
+          <TagsOutlined />Class Management
+        </span>
+      ),
     },
     {
       key: 'create-admin-user',
       children: <CreateAdmin token={state.token} />,
-      label: 'Create Admin User',
+      label: (
+        <span>
+          <UsergroupAddOutlined />Create Admin User
+        </span>
+      ),
     }
   ]
 
