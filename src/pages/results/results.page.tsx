@@ -31,7 +31,7 @@ const Results = () => {
     <div className="container">
       <h1 className="header">Here are the results</h1>
 
-      <Space>
+      <Space style={{ paddingBottom: '12px' }}>
         <Typography.Text>
           Threshold:
         </Typography.Text>

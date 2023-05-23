@@ -100,7 +100,7 @@ const ResultsTable = (props: IProps) => {
                     color={filterSet.has(label) ? 'green' : undefined}
                     key={label}
                     onClick={() => handleTagClick(label)}
-                >{label}</Tag>
+                >{`${label} (${Math.random().toFixed(2)}%)`}</Tag>
             ),
         },
     ];
