@@ -1,4 +1,4 @@
-import { Button, Divider, Form, Input } from 'antd';
+import { Button, Divider, Form, Input, Space } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import axios from 'axios';
 import { useContext } from 'react';
@@ -96,12 +96,14 @@ const CreateAdmin = (props: IProps) => {
                     <Input.Password placeholder="Password" size="large" />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Create User
-                    </Button>
-                    <Button danger onClick={handleCancel}>
-                        Cancel
-                    </Button>
+                    <Space>
+                        <Button type="primary" htmlType="submit">
+                            Create User
+                        </Button>
+                        <Button danger onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </div>
