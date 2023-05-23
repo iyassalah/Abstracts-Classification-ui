@@ -36,7 +36,7 @@ const Results = () => {
 
   return (
     <div className="container">
-      <h1 className="header">Here are the results</h1>
+      <Typography.Title className="header">Here are the results</Typography.Title>
       <Space style={{ paddingBottom: '12px' }}>
         <Typography.Text>
           Threshold:

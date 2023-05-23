@@ -38,29 +38,27 @@ const Interactive = () => {
   )
 
   return (
-    <>
-      <div className="container">
-        <div className="text">Enter the abstract you want to classify:</div>
+    <div className="container">
+      <Typography.Title className="text">Enter the abstract you want to classify:</Typography.Title>
 
-        <div className="input-container">
-          <Input.TextArea
-            className="input"
-            placeholder="Type your abstract here"
-            value={abstract}
-            onChange={(e) => setAbstract(e.target.value)}
-          />
-          <div className="underline"></div>
-        </div>
-
-        <div className="bottom-row">
-          <Button size="large" className="" type="primary" onClick={handleClassify}>
-            Classify
-          </Button>
-          {(tags.length === 0 && tagList !== null) && <Typography color="red">Could not identify any possible categories</Typography>}
-          {tags.length && predictions}
-        </div>
+      <div className="input-container">
+        <Input.TextArea
+          className="input"
+          placeholder="Type your abstract here"
+          value={abstract}
+          onChange={(e) => setAbstract(e.target.value)}
+        />
+        <div className="underline"></div>
       </div>
-    </>
+
+      <div className="bottom-row">
+        <Button size="large" type="primary" onClick={handleClassify}>
+          Classify
+        </Button>
+        {(tags.length === 0 && tagList !== null) && <Typography color="red">Could not identify any possible categories</Typography>}
+        {tags.length && predictions}
+      </div>
+    </div>
   );
 };
 
