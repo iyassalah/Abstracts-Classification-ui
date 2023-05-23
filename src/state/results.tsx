@@ -10,7 +10,12 @@ export type UploadedPDF = UploadFile<LabelledPDF> & { response: NonNullable<Uplo
 export type ResultsState = {
     fileList: UploadedPDF[];
     busy: boolean;
-    resultsPage: { filters?: ResultsFilters, search?: SearchedText<IAbstract> },
+    resultsPage: {
+        filters?: ResultsFilters,
+        search?: SearchedText<IAbstract>,
+        thresh?: number,
+        classCnt?: number,
+    },
     classMapping?: Record<string, string>;
 };
 
@@ -52,7 +57,10 @@ export type Action =
 export const initialState: ResultsState = {
     fileList: [],
     busy: false,
-    resultsPage: {},
+    resultsPage: {
+        classCnt: 5,
+        thresh: 0.9,
+    },
 };
 
 export const reducer = (state: ResultsState, action: Action): ResultsState => {
