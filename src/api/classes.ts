@@ -23,7 +23,10 @@ export const useClasses = () => {
             })
             .catch(err => {
                 console.error(err);
-                msgAPI.error(errorMsg);
+                if (err?.code === 'ERR_NETWORK')
+                    msgAPI.error('Network error: could not fetch class names');
+                else
+                    msgAPI.error(errorMsg);
             })
             .finally(() => {
                 setLoading(false);
