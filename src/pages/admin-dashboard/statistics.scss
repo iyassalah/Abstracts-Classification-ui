@@ -1,18 +1,23 @@
 .stats {
     .cards {
         width: 100%;
+
         &>* {
             height: 100%;
         }
 
-        .recall {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
+        .statcard {
+            height: max-content;
 
-            .recall-facet {
-                padding-bottom: 16px;
-                font-size: larger;
+            .percentage {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                .percentage-label {
+                    padding-bottom: 16px;
+                    font-size: larger;
+                }
             }
         }
     }
