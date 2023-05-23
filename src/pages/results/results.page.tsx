@@ -9,7 +9,7 @@ const Results = () => {
   const { state, dispatch } = useContext(ResultsContext);
   const { classes } = useClasses();
   const [Threshhold, setThreshhold] = useState(0.9);
-  const [ClassCount, setClassCount] = useState(3);
+  const [ClassCount, setClassCount] = useState(5);
 
   const data: IAbstract[] = useMemo(() => {
     return state.fileList
@@ -21,6 +21,7 @@ const Results = () => {
         labels: Object.entries(file.response.pred)
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           .filter(([name, prob]) => prob > Threshhold)
+          .sort((a, b) => b[1] - a[1])
           .slice(0, ClassCount)
           .map(([internalName, prob]) => ({ label: classes[internalName], prob })),
       }))
@@ -60,6 +61,7 @@ const Results = () => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onPressEnter={e => setClassCount(+(e.target as any)?.value ?? 0)}
           placeholder='5'
+          defaultValue={5}
           min={0}
           max={Object.keys(state.classMapping ?? {}).length}
           parser={value => parseInt(value ?? '3')}
