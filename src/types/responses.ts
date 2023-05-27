@@ -20,6 +20,13 @@ export interface ICreateAdmin {
     user_id: string;
 }
 
-export interface IGetCLasses {
-    classes: Array<{internalName: string, displayedName: string}>;
+export interface IGetClasses {
+    classes: Array<{ internalName: string, displayedName: string }>;
+}
+
+export interface IGetStats {
+    tn: number;
+    fn: number;
+    tp: number;
+    fp: number;
 }

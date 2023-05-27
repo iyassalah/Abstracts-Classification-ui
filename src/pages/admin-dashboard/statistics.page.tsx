@@ -1,20 +1,41 @@
-import { TagsOutlined, SwapOutlined } from '@ant-design/icons';
+import { SwapOutlined, TagsOutlined } from '@ant-design/icons';
 import { Card, Col, Divider, Progress, Row, Statistic } from 'antd';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { IGetStats } from '../../types/responses';
 import './statistics.scss';
 
-const StatisticsPage = () => {
-    const PercentCard = (percent: number, label: string) => (
+interface IProps {
+    token: string;
+}
+
+const StatisticsPage = (props: IProps) => {
+    const PercentCard = (props: { percent: number, label: string }) => (
         <Col xl={4} md={8} xs={12} span={6}>
             <Card >
                 <div className='percentage'>
-                    <span className='percentage-label'>{label}</span>
-                    <Progress percent={percent} type='dashboard' strokeColor='green' trailColor='red' />
+                    <span className='percentage-label'>{props.label}</span>
+                    <Progress size='default' percent={props.percent} type='dashboard' strokeColor='green' trailColor='red' />
                 </div>
             </Card>
         </Col>
     )
+    const [Stats, setStats] = useState<IGetStats>({ fn: NaN, fp: NaN, tn: NaN, tp: NaN })
+
+    const { fn, fp, tn, tp } = Stats!;
+    useEffect(() => {
+        axios.get<IGetStats>('/admin/stats', { headers: { Authorization: `Bearer ${props.token}` } })
+            .then(res => setStats(res.data))
+            .catch(err => console.error(err));
+    }, [])
 
     const resTime = 121.87;
+
+
+    const recall = +(100.0 * tp / (tp + fn)).toPrecision(3);
+    const precision = +(100.0 * tp / (tp + fp)).toPrecision(3);
+    const accuracy = +((100.0 * tp + tn) / (tp + tn + fp + fn)).toPrecision(3);
+    const f1Score = +(100.0 * tp / (tp + 0.5 * (fp + fn))).toPrecision(3);
 
     return (
         <div className='stats'>
@@ -33,38 +54,22 @@ const StatisticsPage = () => {
                         <span className='desc'>Average Response Time</span>
                     </Card>
                 </Col>
-                <Col className='statcard' xl={4} md={8} xs={12} span={6}>
-                    <Card >
-                        <div className='percentage'>
-                            <span className='percentage-label'>Recall</span>
-                            <Progress percent={93} type='dashboard' strokeColor='green' trailColor='red' />
-                        </div>
-                    </Card>
-                </Col>
-                <Col className='statcard' xl={4} md={8} xs={12} span={6}>
-                    <Card >
-                        <div className='percentage'>
-                            <span className='percentage-label'>Precision</span>
-                            <Progress percent={60} type='dashboard' strokeColor='green' trailColor='red' />
-                        </div>
-                    </Card>
-                </Col>
-                <Col className='statcard' xl={4} md={8} xs={12} span={6}>
-                    <Card >
-                        <div className='percentage'>
-                            <span className='percentage-label'>Accuracy</span>
-                            <Progress percent={46} type='dashboard' strokeColor='green' trailColor='red' />
-                        </div>
-                    </Card>
-                </Col>
-                <Col className='statcard' xl={4} md={8} xs={12} span={6}>
-                    <Card >
-                        <div className='percentage'>
-                            <span className='percentage-label'>F1-Score</span>
-                            <Progress percent={70} type='dashboard' strokeColor='green' trailColor='red' />
-                        </div>
-                    </Card>
-                </Col>
+                <PercentCard
+                    percent={recall}
+                    label='Recall'
+                />
+                <PercentCard
+                    percent={precision}
+                    label='Precision'
+                />
+                <PercentCard
+                    percent={accuracy}
+                    label='Accuracy'
+                />
+                <PercentCard
+                    percent={f1Score}
+                    label='F1-Score'
+                />
             </Row>
         </div>
     )

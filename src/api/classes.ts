@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ResultsContext } from "../state/results";
 import axios from "axios";
-import { IGetCLasses } from "../types/responses";
+import { IGetClasses } from "../types/responses";
 import { MessageContext } from "../state/message";
 
 export const useClasses = () => {
@@ -13,7 +13,7 @@ export const useClasses = () => {
     }
     const updateClasses = (errorMsg?: string, successMsg?: string) => {
         setLoading(true);
-        axios.get<IGetCLasses>("/classes")
+        axios.get<IGetClasses>("/classes")
             .then(({ data: { classes } }) => {
                 setClasses(
                     Object.fromEntries(classes.map(label => [label.internalName, label.displayedName]))

@@ -20,7 +20,7 @@ function AdminDashboard() {
   const tabs: TabsProps['items'] = [
     {
       key: 'statistics',
-      children: <StatisticsPage />,
+      children: <StatisticsPage token={state.token} />,
       label: (
         <span >
           <DashboardOutlined />
