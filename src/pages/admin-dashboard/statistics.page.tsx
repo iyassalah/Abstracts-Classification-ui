@@ -12,7 +12,7 @@ interface IProps {
 const StatisticsPage = (props: IProps) => {
     const PercentCard = (props: { percent: number, label: string }) => (
         <Col xl={4} md={8} xs={12} span={6}>
-            <Card >
+            <Card className='statcard'>
                 <div className='percentage'>
                     <span className='percentage-label'>{props.label}</span>
                     <Progress size='default' percent={props.percent} type='dashboard' strokeColor='green' trailColor='red' />
@@ -34,7 +34,7 @@ const StatisticsPage = (props: IProps) => {
 
     const recall = +(100.0 * tp / (tp + fn)).toPrecision(3);
     const precision = +(100.0 * tp / (tp + fp)).toPrecision(3);
-    const accuracy = +((100.0 * tp + tn) / (tp + tn + fp + fn)).toPrecision(3);
+    const accuracy = +((100.0 * (tp + tn)) / (tp + tn + fp + fn)).toPrecision(3);
     const f1Score = +(100.0 * tp / (tp + 0.5 * (fp + fn))).toPrecision(3);
 
     return (
