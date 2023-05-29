@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import { authReducer } from "./reducer";
 import { AuthState, AuthStatus, getInitialState } from "./state";
 import { createContext } from "react";
+import { redirect } from "react-router-dom";
 
 interface IAuthProviderProps {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
       },
     });
     localStorage.setItem("token", token);
+    redirect('/adminDashboard')
   };
 
   const logout = () => {
