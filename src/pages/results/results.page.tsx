@@ -22,7 +22,7 @@ const Results = () => {
           .filter(([name, prob]) => prob > thresh)
           .sort((a, b) => b[1] - a[1])
           .slice(0, classCnt)
-          .map(([internalName, prob]) => ({ label: classes[internalName], prob })),
+          .map(([internalName, prob]) => ({ label: Object.hasOwn(classes, internalName) ? classes[internalName] : internalName, prob })),
       }))
   }, [state.fileList, thresh, classCnt])
 

@@ -12,15 +12,14 @@ interface IProps {
 }
 
 const MultiUpload = ({ children }: IProps) => {
-    const { dispatch, state: { fileList } } = useContext(ResultsContext);
+    const { dispatch } = useContext(ResultsContext);
     const { msgAPI } = useContext(MessageContext);
 
     const props: UploadProps<LabelledPDF> = {
-        // openFileDialogOnClick: false,
         action: `${import.meta.env.VITE_API_ENDPOINT}/active/proba/pdf`,
         name: 'file',
         multiple: true,
-        defaultFileList: fileList,
+        showUploadList: false,
         accept: '.pdf',
         onChange({ file, fileList }) {
             const { response, name, uid, status, size, percent } = file;
@@ -66,15 +65,6 @@ const MultiUpload = ({ children }: IProps) => {
     return (
         <div className='multiupload-wrapper'>
             <Dragger {...props} className='dragger'>
-                {/* <div className='dragger-children'>
-                    <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                        {fileList.length ? "Please don't leave the page while your files still being uploaded" : ''}
-                    </p>
-                </div> */}
                 {children}
                 <p className='hint'>Drag a PDF file into this table to upload it, or click here to open a file picker</p>
                 <Button icon={<UploadOutlined />} />

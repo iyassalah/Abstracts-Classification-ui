@@ -1,3 +1,4 @@
+import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import { FilterValue } from "antd/es/table/interface";
@@ -8,6 +9,7 @@ import useTextSearch, { useColumnProps } from "../../hooks/text-search.hook";
 import { ResultsContext, UploadedPDF } from "../../state/results";
 import "./batch.scss";
 import MultiUpload from "./multi-upload.component";
+
 
 const UploadStatus = ({ status, percent }: UploadedPDF) => {
   if (status === 'done' || status === 'success')
@@ -22,7 +24,7 @@ const UploadStatus = ({ status, percent }: UploadedPDF) => {
 }
 
 const Batch = () => {
-  const { state: { busy, fileList } } = useContext(ResultsContext);
+  const { state: { busy, fileList }, dispatch } = useContext(ResultsContext);
   const [filters, setFilters] = useState<Record<"status" | "name", FilterValue | null>>({ status: [], name: [] });
   useBlock(busy, 'Your files are still uploading, sure you want to leave?');
   const navigate = useNavigate();
@@ -57,7 +59,21 @@ const Batch = () => {
       filters: statuses.map(status => ({ text: status, value: status })),
       filteredValue: filters.status,
       onFilter: (value, { status }) => status === value,
-      render: (text, file) => <UploadStatus {...file} />,
+      render: (text, file) => (
+        <>
+          <UploadStatus {...file} />
+          <Button
+            size='small'
+            danger
+            className='delete-btn'
+            icon={<DeleteOutlined />}
+            onClick={() => dispatch({
+              type: 'REMOVE_LABELLED_PDF',
+              uid: file.uid
+            })}
+          />
+        </>
+      ),
     },
   ];
   const disableBtn = busy || fileList.length === 0;
@@ -73,10 +89,11 @@ const Batch = () => {
             <div className="file-list-container" onClick={e => e.stopPropagation()}>
               <h2 className="text">Uploaded Files</h2>
               <Table
+                className={fileList.length > 0 ? 'full-list' : ''}
                 onChange={handleChange}
                 columns={columns}
                 dataSource={fileList.map((file, i) => ({ ...file, key: i }))}
-                pagination={false}
+                pagination={{ pageSize: 7 }}
               />
             </div>
           </MultiUpload>
