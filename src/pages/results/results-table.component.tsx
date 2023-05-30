@@ -112,6 +112,7 @@ const ResultsTable = (props: IProps) => {
         <>
             {contextHolder}
             <Table
+                pagination={{pageSize: 5}}
                 size='small'
                 onChange={handleChange}
                 className="results-table"
